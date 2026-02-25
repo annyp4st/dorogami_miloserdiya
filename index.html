@@ -19,7 +19,7 @@
 
         body {
             font-family: 'PT Serif', 'Times New Roman', serif;
-            background: #8b7a6b;  /* тёмный фон под «переплёт» */
+            background: #8b7a6b;
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -27,24 +27,22 @@
             padding: 12px;
         }
 
-        /* Главный контейнер — как раскрытая книга */
         .book {
             width: 100%;
             max-width: 1600px;
             height: calc(100vh - 24px);
-            background: #fbf3e0;  /* старый бумажный оттенок */
+            background: #fbf3e0;
             background-image: 
                 linear-gradient(145deg, rgba(200,180,150,0.1) 0%, transparent 20%),
                 repeating-linear-gradient(45deg, rgba(150,130,100,0.02) 0px, rgba(150,130,100,0.02) 2px, transparent 2px, transparent 6px);
             box-shadow: 0 20px 30px rgba(0,0,0,0.5), inset 0 0 0 1px #e5d5b5, inset 0 0 20px #dac29c;
-            border-radius: 8px 8px 8px 8px;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             position: relative;
         }
 
-        /* Эффект потёртости по краям */
         .book::before {
             content: '';
             position: absolute;
@@ -55,7 +53,6 @@
             z-index: 5;
         }
 
-        /* Шапка — как титульный лист */
         .header {
             background: rgba(235, 220, 195, 0.7);
             backdrop-filter: blur(2px);
@@ -95,7 +92,6 @@
             margin-top: 6px;
         }
 
-        /* Основная часть (три колонки) */
         .main {
             display: flex;
             flex: 1;
@@ -104,7 +100,6 @@
             z-index: 2;
         }
 
-        /* Левая колонка — оглавление (список точек) */
         .sidebar {
             width: 280px;
             background: rgba(240, 230, 210, 0.6);
@@ -162,7 +157,6 @@
             font-weight: 600;
             color: #2f2419;
             border-bottom: 1px solid #dccbb2;
-            position: relative;
         }
 
         .places-list li:hover {
@@ -180,22 +174,20 @@
             box-shadow: inset 0 0 0 1px #c9af8b;
         }
 
-        /* Центральная часть — карта */
         .map-container {
             flex: 1;
             position: relative;
             border-left: 1px solid #cbb48e;
             border-right: 1px solid #cbb48e;
-            background: #ddd2c0;  /* если карта не загрузится */
+            background: #ddd2c0;
         }
 
         #map {
             width: 100%;
             height: 100%;
-            filter: sepia(0.2) contrast(0.95);  /* лёгкий винтажный оттенок */
+            filter: sepia(0.2) contrast(0.95);
         }
 
-        /* Правая колонка — страница с деталями (фото, текст, аудио) */
         .info-panel {
             width: 360px;
             background: rgba(245, 235, 215, 0.85);
@@ -249,7 +241,6 @@
             border-radius: 8px;
         }
 
-        /* Галерея фотографий (имитация вклеенных карточек) */
         .photo-gallery {
             display: flex;
             gap: 12px;
@@ -267,7 +258,7 @@
             object-fit: cover;
             transition: transform 0.2s, box-shadow 0.2s;
             background: #fff9ea;
-            padding: 4px 4px 8px 4px;  /* имитация фотоальбома */
+            padding: 4px 4px 8px 4px;
         }
 
         .photo-gallery img:hover {
@@ -275,7 +266,6 @@
             box-shadow: 0 12px 20px rgba(40, 25, 10, 0.4), 0 0 0 1px #a4835a, 0 0 0 4px #e7d7bb;
         }
 
-        /* Текст — как книжная страница */
         .place-fulltext {
             font-family: 'PT Serif', serif;
             font-size: 0.98rem;
@@ -289,25 +279,32 @@
             white-space: pre-line;
             border-left: 4px solid #ab8c66;
             border-bottom: 2px solid #dac09f;
-            text-indent: 1.5em;  /* красная строка */
+            text-indent: 1.5em;
         }
 
-        .place-fulltext:first-of-type {
-            text-indent: 0;
-        }
-
-        /* Цитаты внутри текста (выделены курсивом) */
-        .place-fulltext em {
+        /* Стили для цитат (выделение в тексте) */
+        .quote {
             font-family: 'Caveat', cursive;
-            font-size: 1.1rem;
-            color: #5a3e28;
-            background: rgba(200, 170, 130, 0.1);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-style: italic;
+            font-size: 1.05rem;
+            background: #efe2cf;
+            color: #3f2c19;
+            padding: 2px 8px 2px 6px;
+            border-radius: 12px 4px 12px 4px;
+            box-shadow: 0 2px 6px rgba(150, 110, 70, 0.3);
+            border-left: 3px solid #b48c5c;
+            border-bottom: 1px solid #b48c5c;
+            display: inline-block;  /* чтобы фон не разрывался */
+            line-height: 1.5;
+            margin: 2px 0;
+            white-space: normal;
+            transition: background 0.2s;
         }
 
-        /* Аудиоплеер (стилизованный) */
+        .quote:hover {
+            background: #e4cfb5;
+            box-shadow: 0 4px 8px rgba(120, 80, 40, 0.4);
+        }
+
         .audio-player {
             width: 100%;
             margin-top: 12px;
@@ -322,7 +319,6 @@
             background: #efddc5;
         }
 
-        /* Нижний колонтитул — как выходные данные */
         .footer-note {
             font-family: 'Caveat', cursive;
             text-align: center;
@@ -335,7 +331,6 @@
             box-shadow: inset 0 4px 6px -4px #b29675;
         }
 
-        /* Адаптивность для мобильных (книжная верстка ломается — перестраиваем) */
         @media (max-width: 900px) {
             .main {
                 flex-direction: column;
@@ -385,18 +380,6 @@
                 font-size: 1.4rem;
             }
         }
-
-        /* Стили для цитат Льва Толстого (если добавить отдельно) */
-        .quote {
-            font-family: 'Caveat', cursive;
-            font-size: 1.2rem;
-            color: #4a3724;
-            background: #efdecb;
-            padding: 10px 18px;
-            border-radius: 20px 4px 20px 4px;
-            margin: 15px 0;
-            border-left: 4px solid #977b58;
-        }
     </style>
 </head>
 <body>
@@ -407,18 +390,15 @@
         </div>
 
         <div class="main">
-            <!-- Оглавление (список точек) -->
             <div class="sidebar">
                 <h2>Оглавление</h2>
                 <ul class="places-list" id="places-list"></ul>
             </div>
 
-            <!-- Карта -->
             <div class="map-container">
                 <div id="map"></div>
             </div>
 
-            <!-- Текстовая страница с иллюстрациями и звуком -->
             <div class="info-panel" id="info-panel">
                 <div class="info-header">
                     <h3 id="info-title">Станция «Козлова Засека»</h3>
@@ -511,14 +491,13 @@
                 controls: ['zoomControl', 'fullscreenControl']
             });
 
-            // Добавляем метки
             places.forEach(place => {
                 const placemark = new ymaps.Placemark(place.coords, {
                     hintContent: place.name,
                     balloonContent: `<strong>${place.name}</strong><br>${place.description}`
                 }, {
                     preset: 'islands#dotIcon',
-                    iconColor: '#7d5d3a'  // под цвет книги
+                    iconColor: '#7d5d3a'
                 });
 
                 placemark.events.add('click', () => {
@@ -530,10 +509,8 @@
                 placemarks.push(placemark);
             });
 
-            // Заполняем список точек
             fillPlacesList();
 
-            // Показываем первую точку по умолчанию
             if (places.length > 0) {
                 showInfo(places[0]);
                 highlightActivePlace(places[0].id);
@@ -565,11 +542,18 @@
             });
         }
 
+        // Функция для выделения цитат в кавычках «...»
+        function highlightQuotes(text) {
+            // Заменяем все вхождения «...» на спан с классом quote (кавычки остаются внутри)
+            return text.replace(/«([^»]+)»/g, '<span class="quote">«$1»</span>');
+        }
+
         function showInfo(place) {
             document.getElementById('info-title').textContent = place.name;
             document.getElementById('info-sub').textContent = place.description;
 
             const contentDiv = document.getElementById('info-content');
+            
             // Галерея фото
             let galleryHtml = '<div class="photo-gallery">';
             place.images.forEach(img => {
@@ -577,8 +561,9 @@
             });
             galleryHtml += '</div>';
 
-            // Полный текст
-            const textHtml = `<div class="place-fulltext">${place.fullText.replace(/\n/g, '<br>')}</div>`;
+            // Полный текст с выделенными цитатами
+            const highlightedText = highlightQuotes(place.fullText);
+            const textHtml = `<div class="place-fulltext">${highlightedText.replace(/\n/g, '<br>')}</div>`;
 
             // Аудиоплеер
             const audioHtml = `<audio controls src="${place.audio}" class="audio-player"></audio>`;
