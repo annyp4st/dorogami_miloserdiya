@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Дорогами милосердия · Аудиогид по местам Льва Толстого</title>
-    <!-- Яндекс.Карты API  -->
+    <title>Дорогами милосердия · страницы Льва Толстого</title>
+    <!-- Яндекс.Карты API (вставьте свой ключ) -->
     <script src="https://api-maps.yandex.ru/2.1/?apikey=b1b1754d-d9f3-41c5-8c81-74400606bc5c&lang=ru_RU" type="text/javascript"></script>
+    <!-- Шрифты в стиле старых книг и рукописей -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Cormorant+Garamond:wght@400;600;700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,216 +18,324 @@
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: #f0f2f5;
-            color: #1e2b3c;
-            line-height: 1.5;
+            font-family: 'PT Serif', 'Times New Roman', serif;
+            background: #8b7a6b;  /* тёмный фон под «переплёт» */
             height: 100vh;
-            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
         }
 
-        .app {
+        /* Главный контейнер — как раскрытая книга */
+        .book {
+            width: 100%;
+            max-width: 1600px;
+            height: calc(100vh - 24px);
+            background: #fbf3e0;  /* старый бумажный оттенок */
+            background-image: 
+                linear-gradient(145deg, rgba(200,180,150,0.1) 0%, transparent 20%),
+                repeating-linear-gradient(45deg, rgba(150,130,100,0.02) 0px, rgba(150,130,100,0.02) 2px, transparent 2px, transparent 6px);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.5), inset 0 0 0 1px #e5d5b5, inset 0 0 20px #dac29c;
+            border-radius: 8px 8px 8px 8px;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            max-width: 1600px;
-            margin: 0 auto;
-            background: white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            position: relative;
         }
 
+        /* Эффект потёртости по краям */
+        .book::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 8px;
+            box-shadow: inset 0 0 30px #ac9e8b, inset 0 0 15px #6b5e4e;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Шапка — как титульный лист */
         .header {
-            background: #2c3e50;
-            color: white;
-            padding: 16px 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            background: rgba(235, 220, 195, 0.7);
+            backdrop-filter: blur(2px);
+            padding: 18px 28px;
+            border-bottom: 2px solid #b6a68b;
+            box-shadow: 0 4px 8px rgba(100, 70, 40, 0.2);
+            position: relative;
             z-index: 10;
         }
 
         .header h1 {
-            font-size: 1.6rem;
+            font-family: 'Cormorant Garamond', 'Georgia', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #3e2e1f;
+            text-shadow: 1px 1px 2px rgba(255,245,220,0.8);
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header h1 span {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            margin-left: 20px;
+            color: #7a4f2e;
             font-weight: 400;
-            letter-spacing: 1px;
         }
 
         .header p {
-            font-size: 0.9rem;
-            opacity: 0.9;
+            font-family: 'Caveat', cursive;
+            font-size: 1.2rem;
+            color: #5f4a33;
+            border-left: 3px solid #ab8b64;
+            padding-left: 16px;
             margin-top: 6px;
-            font-style: italic;
         }
 
+        /* Основная часть (три колонки) */
         .main {
             display: flex;
             flex: 1;
-            min-height: 0;  /* важно для Firefox/flex */
+            min-height: 0;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Боковая панель со списком */
+        /* Левая колонка — оглавление (список точек) */
         .sidebar {
             width: 280px;
-            background: #f9fafc;
-            border-right: 1px solid #dce1e7;
+            background: rgba(240, 230, 210, 0.6);
+            backdrop-filter: blur(2px);
+            border-right: 2px solid #cbb99b;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            box-shadow: inset -2px 0 8px rgba(140, 110, 70, 0.2);
         }
 
         .sidebar h2 {
-            padding: 20px 20px 10px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #2c3e50;
-            border-bottom: 1px solid #dce1e7;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            padding: 24px 20px 12px;
+            color: #3f2f1d;
+            border-bottom: 1px dashed #bda78b;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
         }
 
         .places-list {
             list-style: none;
-            padding: 10px 12px;
+            padding: 8px 16px 20px;
             overflow-y: auto;
-            flex: 1;
+            scrollbar-width: thin;
+            scrollbar-color: #aa8f72 #e5d5be;
+        }
+
+        .places-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        .places-list::-webkit-scrollbar-track {
+            background: #e5d5be;
+            border-radius: 10px;
+        }
+        .places-list::-webkit-scrollbar-thumb {
+            background: #aa8f72;
+            border-radius: 10px;
         }
 
         .places-list li {
-            padding: 14px 16px;
-            margin-bottom: 8px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            font-family: 'PT Serif', serif;
+            font-size: 1rem;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            background: #faf1df;
+            border-radius: 30px 8px 8px 30px;
+            box-shadow: 0 3px 6px rgba(110, 70, 30, 0.15);
             cursor: pointer;
-            transition: all 0.2s ease;
-            border-left: 4px solid transparent;
-            font-weight: 500;
+            transition: all 0.2s;
+            border-left: 6px solid #ab8e6a;
+            font-weight: 600;
+            color: #2f2419;
+            border-bottom: 1px solid #dccbb2;
+            position: relative;
         }
 
         .places-list li:hover {
-            background: #eef2f6;
-            border-left-color: #9b59b6;
-            transform: translateX(4px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            background: #efdecb;
+            border-left-width: 10px;
+            border-left-color: #7c5d3e;
+            transform: translateX(5px);
+            box-shadow: 0 6px 12px rgba(80, 50, 20, 0.2);
         }
 
         .places-list li.active {
-            border-left-color: #8e44ad;
-            background: #e8eef7;
-            font-weight: 600;
+            border-left-color: #3e2a16;
+            background: #e1cfb5;
+            font-weight: 700;
+            box-shadow: inset 0 0 0 1px #c9af8b;
         }
 
-        /* Карта */
+        /* Центральная часть — карта */
         .map-container {
             flex: 1;
-            background: #cfd8e6;
             position: relative;
+            border-left: 1px solid #cbb48e;
+            border-right: 1px solid #cbb48e;
+            background: #ddd2c0;  /* если карта не загрузится */
         }
 
         #map {
             width: 100%;
             height: 100%;
+            filter: sepia(0.2) contrast(0.95);  /* лёгкий винтажный оттенок */
         }
 
-        /* Информационная панель */
+        /* Правая колонка — страница с деталями (фото, текст, аудио) */
         .info-panel {
             width: 360px;
-            background: #ffffff;
-            border-left: 1px solid #dce1e7;
+            background: rgba(245, 235, 215, 0.85);
+            backdrop-filter: blur(2px);
+            border-left: 2px solid #cbb99b;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: -2px 0 8px rgba(0,0,0,0.02);
+            box-shadow: inset 2px 0 8px rgba(140, 110, 70, 0.15);
         }
 
         .info-header {
-            padding: 20px 20px 12px;
-            border-bottom: 1px solid #edf2f7;
+            padding: 22px 22px 12px;
+            border-bottom: 2px solid #cfbda2;
+            background: rgba(225, 205, 175, 0.3);
         }
 
         .info-header h3 {
-            font-size: 1.4rem;
-            color: #1e2b3c;
-            margin-bottom: 4px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #3e2b18;
+            line-height: 1.2;
+            margin-bottom: 6px;
         }
 
         .info-header .place-sub {
-            color: #5b6f82;
-            font-size: 0.9rem;
+            font-family: 'Caveat', cursive;
+            font-size: 1.2rem;
+            color: #745f45;
+            border-top: 1px dotted #bb9f80;
+            padding-top: 8px;
         }
 
         .info-content {
-            padding: 0 20px 20px;
+            padding: 16px 22px 22px;
             overflow-y: auto;
             flex: 1;
+            scrollbar-width: thin;
+            scrollbar-color: #aa8f72 #ecdbbd;
         }
 
+        .info-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .info-content::-webkit-scrollbar-track {
+            background: #ecdbbd;
+        }
+        .info-content::-webkit-scrollbar-thumb {
+            background: #aa8f72;
+            border-radius: 8px;
+        }
+
+        /* Галерея фотографий (имитация вклеенных карточек) */
         .photo-gallery {
             display: flex;
             gap: 12px;
             overflow-x: auto;
-            padding: 12px 0 8px;
-            margin-bottom: 12px;
+            padding: 12px 0 12px;
+            margin-bottom: 16px;
             scrollbar-width: thin;
-            scrollbar-color: #b0c0d0 #f0f4fa;
-        }
-
-        .photo-gallery::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .photo-gallery::-webkit-scrollbar-thumb {
-            background-color: #b0c0d0;
-            border-radius: 10px;
         }
 
         .photo-gallery img {
-            height: 120px;
+            height: 110px;
             width: auto;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            box-shadow: 0 8px 15px rgba(60, 40, 20, 0.3), 0 0 0 1px #bea887, 0 0 0 3px #f3e9d2;
             object-fit: cover;
-            transition: transform 0.2s;
-            border: 2px solid white;
+            transition: transform 0.2s, box-shadow 0.2s;
+            background: #fff9ea;
+            padding: 4px 4px 8px 4px;  /* имитация фотоальбома */
         }
 
         .photo-gallery img:hover {
-            transform: scale(1.03);
-            box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+            transform: scale(1.02) rotate(0.5deg);
+            box-shadow: 0 12px 20px rgba(40, 25, 10, 0.4), 0 0 0 1px #a4835a, 0 0 0 4px #e7d7bb;
         }
 
+        /* Текст — как книжная страница */
         .place-fulltext {
+            font-family: 'PT Serif', serif;
             font-size: 0.98rem;
-            line-height: 1.7;
-            color: #2b3e55;
-            background: #f9fbfe;
-            padding: 18px 16px;
-            border-radius: 24px;
-            margin: 18px 0;
+            line-height: 1.8;
+            color: #2f261c;
+            background: rgba(250, 242, 225, 0.7);
+            padding: 22px 22px;
+            border-radius: 2px 20px 2px 20px;
+            margin: 16px 0 20px;
+            box-shadow: inset 0 0 0 1px #e4cfb2, inset 0 0 20px #eee1cd, 0 6px 12px rgba(80, 50, 30, 0.1);
             white-space: pre-line;
-            border: 1px solid #e3eaf2;
-            max-height: 350px;
-            overflow-y: auto;
+            border-left: 4px solid #ab8c66;
+            border-bottom: 2px solid #dac09f;
+            text-indent: 1.5em;  /* красная строка */
         }
 
+        .place-fulltext:first-of-type {
+            text-indent: 0;
+        }
+
+        /* Цитаты внутри текста (выделены курсивом) */
+        .place-fulltext em {
+            font-family: 'Caveat', cursive;
+            font-size: 1.1rem;
+            color: #5a3e28;
+            background: rgba(200, 170, 130, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        /* Аудиоплеер (стилизованный) */
         .audio-player {
             width: 100%;
-            margin-top: 8px;
+            margin-top: 12px;
             border-radius: 40px;
-            background: #f1f6fd;
-            border: none;
+            background: #efddc5;
+            border: 2px solid #bea383;
+            box-shadow: inset 0 2px 5px #aa8b68, 0 4px 8px #ac8f6e;
             height: 48px;
         }
 
         .audio-player::-webkit-media-controls-panel {
-            background: #f1f6fd;
+            background: #efddc5;
         }
 
+        /* Нижний колонтитул — как выходные данные */
         .footer-note {
+            font-family: 'Caveat', cursive;
             text-align: center;
-            font-size: 0.8rem;
-            color: #8a9cb0;
-            padding: 8px 0;
-            border-top: 1px dashed #dce1e7;
+            font-size: 1rem;
+            color: #6f5540;
+            padding: 12px 0;
+            border-top: 2px solid #d6bc99;
+            background: rgba(215, 190, 160, 0.2);
+            letter-spacing: 1px;
+            box-shadow: inset 0 4px 6px -4px #b29675;
         }
 
-        /* Адаптация для планшетов и мобильных */
+        /* Адаптивность для мобильных (книжная верстка ломается — перестраиваем) */
         @media (max-width: 900px) {
             .main {
                 flex-direction: column;
@@ -232,261 +344,247 @@
                 width: 100%;
                 height: 200px;
                 border-right: none;
-                border-bottom: 1px solid #dce1e7;
+                border-bottom: 2px solid #cbb99b;
             }
             .info-panel {
                 width: 100%;
                 height: 300px;
                 border-left: none;
-                border-top: 1px solid #dce1e7;
+                border-top: 2px solid #cbb99b;
             }
             .map-container {
-                height: 400px;
+                height: 300px;
             }
             .info-content {
                 display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                gap: 15px;
+                flex-direction: column;
             }
             .photo-gallery {
-                width: 100%;
+                padding: 8px 0;
             }
             .place-fulltext {
-                max-height: 150px;
-                width: 100%;
-            }
-            .audio-player {
-                width: 100%;
+                max-height: 160px;
+                overflow-y: auto;
             }
         }
 
         @media (max-width: 600px) {
             .header h1 {
+                font-size: 1.5rem;
+                flex-wrap: wrap;
+            }
+            .header h1 span {
                 font-size: 1.3rem;
+                margin-left: 8px;
             }
             .places-list li {
-                padding: 10px;
+                padding: 10px 12px;
+                font-size: 0.9rem;
             }
             .info-header h3 {
-                font-size: 1.2rem;
+                font-size: 1.4rem;
             }
+        }
+
+        /* Стили для цитат Льва Толстого (если добавить отдельно) */
+        .quote {
+            font-family: 'Caveat', cursive;
+            font-size: 1.2rem;
+            color: #4a3724;
+            background: #efdecb;
+            padding: 10px 18px;
+            border-radius: 20px 4px 20px 4px;
+            margin: 15px 0;
+            border-left: 4px solid #977b58;
         }
     </style>
 </head>
 <body>
-<div class="app">
-    <div class="header">
-        <h1>🚂 Дорогами милосердия · заветы Льва Толстого</h1>
-        <p>аудиогид по памятным местам</p>
+    <div class="book">
+        <div class="header">
+            <h1>Дорогами милосердия <span>заветы Льва Толстого</span></h1>
+            <p>страницы жизни и рукописи</p>
+        </div>
+
+        <div class="main">
+            <!-- Оглавление (список точек) -->
+            <div class="sidebar">
+                <h2>Оглавление</h2>
+                <ul class="places-list" id="places-list"></ul>
+            </div>
+
+            <!-- Карта -->
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+
+            <!-- Текстовая страница с иллюстрациями и звуком -->
+            <div class="info-panel" id="info-panel">
+                <div class="info-header">
+                    <h3 id="info-title">Станция «Козлова Засека»</h3>
+                    <div class="place-sub" id="info-sub">звук поезда издалека</div>
+                </div>
+                <div class="info-content" id="info-content">
+                    <!-- Динамическое содержимое -->
+                </div>
+                <div class="footer-note">Лев Толстой — «Любовь, отдавая, остаётся с тобой»</div>
+            </div>
+        </div>
     </div>
 
-    <div class="main">
-        <!-- Список точек (сайдбар) -->
-        <div class="sidebar">
-            <h2>📍 Маршрут</h2>
-            <ul class="places-list" id="places-list"></ul>
-        </div>
+    <script>
+        // Массив с точками (ваши тексты)
+        const places = [
+            {
+                id: 1,
+                name: 'Станция «Козлова Засека»',
+                coords: [54.0747, 37.5233],
+                description: 'Звук поезда издалека, он проходит мимо и затихает. Ветер.',
+                fullText: `Мы стоим на станции Козлова Засека. Здесь так тихо и уютно, что кажется, будто время остановилось. И если закрыть глаза, можно представить, как больше ста лет назад сюда подходил поезд, и из вагона выходил человек в простой рубахе, с бородой и очень добрыми глазами.\nЭто Лев Николаевич Толстой. Он жил рядом, в Ясной Поляне. Отсюда уезжал в Москву, сюда возвращался. И каждый раз, наверное, думал: как хорошо дома, как пахнет земля и трава.\nА однажды в Москве с ним случилось то, что перевернуло всё. Он пошёл помогать бедным людям. Ходил по ночлежкам, давал деньги. И вдруг почувствовал: ему стыдно. Представляете? Он хотел как лучше, а чувствовал себя почти преступником.\nПотому что понял: когда просто даёшь монетку, человек краснеет, отворачивается. Помощь может унижать, если смотреть на того, кому помогаешь, сверху вниз. Толстой написал об этом так: «Я дал ему рубль... и он взял, но... мне показалось, что он покраснел. И мне стало так больно, гадко...»\nИ он задумался: как же помочь так, чтобы не ранить? Чтобы любовь была настоящей?\nПойдёмте искать ответ.`,
+                audio: 'audio/1.mp3',
+                images: ['images/1.jpg', 'images/11.jpg']
+            },
+            {
+                id: 2,
+                name: 'Ясная Поляна',
+                coords: [54.0751, 37.5263],
+                description: 'Птицы, тишина, ветер.',
+                fullText: `Мы в Ясной Поляне. Здесь так красиво, что хочется дышать глубоко-глубоко. Эти деревья помнят Толстого. По этим дорожкам он ходил и думал о самом важном.\nИ он придумал такой образ. Представьте дерево. Оно растёт само, у него корни, ствол, живые ветки. А на нём созревают плоды. Это и есть настоящая доброта.\nНельзя привязать яблоки к сухой палке и сказать: «Смотрите, яблоки выросли!». Так и с добром. Если помогать отстранённо, просто «отвязаться»: кинул монетку и забыл, сделал для галочки и пошёл дальше, - это как яблоко на сухой палке. Вроде красиво, а внутри пусто.\nТолстой понял: доброта должна идти изнутри, как сок в дереве. Когда ты по-настоящему чувствуешь того, кому помогаешь, когда ты с ним рядом, когда тебе не всё равно, - тогда и плоды настоящие.\nНо знаете, что меня поразило? Он не стал ждать, пока станет идеальным. Потому что вокруг люди голодали, дети плакали. И в 1891 году он поехал в деревню - открывать бесплатные столовые, кормить умирающих. Он написал тогда удивительные слова: «Тут много не того, что должно быть... тут греха конца нет, но не могу жить дома, писать. Чувствую потребность участвовать, что-то делать».\n«Не могу не делать». Даже если не идеально, даже если сомневаешься - но если рядом кому-то плохо, надо просто быть рядом. Это, кажется, самое главное.`,
+                audio: 'audio/2.mp3',
+                images: ['images/2.jpg', 'images/22.jpg']
+            },
+            {
+                id: 3,
+                name: 'Памятник Толстому и новый сквер',
+                coords: [54.1942, 37.6184],
+                description: 'Фонтан, детские голоса, городской шум.',
+                fullText: `Мы в центре Тулы, у памятника. Посмотрите, какой Толстой - не сидит важно, а идёт. Шагает по городу, как будто хочет быть с нами.\nА вокруг новый сквер. Скамейки, качели, цитаты из его книг. Здесь можно посидеть, отдохнуть, прочитать его плакаты. И даже музыку послушать, которую он любил, - QR-коды есть. Мне кажется, ему бы понравилось. Что доброта и взаимопомощь друг другу стала просто частью нашей жизни, незаметной, как воздух.`,
+                audio: 'audio/3.mp3',
+                images: ['images/3.jpg', 'images/33.jpg']
+            },
+            {
+                id: 4,
+                name: 'Молодёжный центр «Родина»',
+                coords: [54.2058, 37.6189],
+                description: 'Спокойная, современная музыка.',
+                fullText: `А это место - молодёжный центр «Родина». Здесь собираются волонтёры, и те, кто хочет помогать.\nИ сейчас я расскажу вам одну историю, которая для меня очень личная. У меня есть младший брат, и его зовут Лев. В честь Толстого. Ему восемь лет. Однажды в школе объявили акцию «Письмо солдату». И Лев достал свои самые лучшие ручки с глиттером - те, которые обычно бережёт, потому что они быстро заканчиваются. Выбрал самые красивые наклейки. И старательно вывел: «Вернись живым». А внизу нарисовал человечков. У них были нахмуренные брови и огромные улыбки. Такие смешные.\nИ я смотрела на него и думала: он не задаёт себе вопросов «достаточно ли я добрый?», «не ради ли похвалы я это делаю?». Он просто рисует. Потому что хочет, чтобы солдату стало теплее.\nИ тогда я поняла. Такая открытка - это маленький кирпичик. Сама по себе она крошечная. Но если сложить тысячу таких кирпичиков, получится стена. Стена добра, защиты, поддержки. Мы все, когда приносим корм животным, или помогаем кому-то, или просто улыбаемся, - мы кладём свои кирпичики. И без каждого из них стена была бы чуточку слабее.`,
+                audio: 'audio/4.mp3',
+                images: ['images/4.jpg', 'images/44.jpg']
+            },
+            {
+                id: 5,
+                name: 'Музей Л.Н. Толстого',
+                coords: [54.1972, 37.6202],
+                description: 'Тишина, потом голос Толстого.',
+                fullText: `Мы в музее. Здесь хранятся его книги, рукописи. Но есть чудо, которое нельзя увидеть глазами, - его голос. Больше ста лет назад его записали на восковой валик фонографа. Сейчас мы его услышим. (Звук записи)\nСлышите? Он говорит с нами из другого времени. И у него есть слова, которые для меня теперь самые главные: «Любовь - это единственная вещь, которую, отдавая, ты оставляешь себе».\nКак это? Представьте свечу. Если от неё зажечь другую, разве первая станет гореть слабее? Нет. Так и с любовью. Когда мы делимся ею, её внутри нас становится только больше.`,
+                audio: 'audio/5.mp3',
+                images: ['images/5.jpg', 'images/55.jpg']
+            },
+            {
+                id: 6,
+                name: 'Мурал на улице Октябрьской',
+                coords: [54.2091, 37.6235],
+                description: 'Улица, вечер, или тихая музыка.',
+                fullText: `Последняя остановка. Улица Октябрьская, дом 9а. На стене - огромный портрет Льва Николаевича. А внизу слова: «Сильные люди всегда просты».\nМне кажется, это про него. И про всех нас. Потому что для доброты не нужно быть особенным. Не нужно быть героем или святым. Достаточно просто хотеть, чтобы другому было хорошо. Это так просто - и так трудно одновременно.\nПотому что, когда мы перестаём думать «достаточно ли я хорош», а просто делаем маленькие шаги, на смену сомнениям приходит тихая радость. Та самая, о которой говорил Толстой: любовь, которую отдаёшь, остаётся с тобой.\nИ ещё мне очень хочется, чтобы мы помнили: даже если кажется, что твоё дело не заметно, что ты мало что можешь, - вместе мы огромная сила. Каждый наш маленький кирпичик складывается в большую стену добра. И мы все хотим быть простыми, не гордыми, а просто людьми, которые умеют любить и помогать.`,
+                audio: 'audio/6.mp3',
+                images: ['images/6.jpg', 'images/66.jpg']
+            },
+            {
+                id: 7,
+                name: 'Эпилог. Московский вокзал',
+                coords: [54.2063, 37.6248],
+                description: 'Звук поезда вдалеке.',
+                fullText: `Когда-нибудь, когда вы будете уезжать с Московского вокзала, посмотрите на его здание от путей. На нем есть скромная табличка. На ней написано: «На этом вокзале многократно бывал Л. Н. Толстой. В 1879 году он встречал здесь И. С. Тургенева».\nЭто маленькая табличка, на которую многие не обращают внимания. Но она - тоже кирпичик. Всё большое начинается с малого. С одной встречи, с одного рисунка, с одной улыбки.\nСпасибо, что прошли этот путь со мной. До новых встреч!`,
+                audio: 'audio/7.mp3',
+                images: ['images/7.jpg']
+            }
+        ];
 
-        <!-- Карта -->
-        <div class="map-container">
-            <div id="map"></div>
-        </div>
+        // Глобальные переменные
+        let map, placemarks = [];
 
-        <!-- Панель с подробной информацией, фото и аудио -->
-        <div class="info-panel" id="info-panel">
-            <div class="info-header">
-                <h3 id="info-title">Станция «Козлова Засека»</h3>
-                <div class="place-sub" id="info-sub">нажмите на метку или пункт списка</div>
-            </div>
-            <div class="info-content" id="info-content">
-                <!-- Динамически заполняется -->
-            </div>
-            <div class="footer-note">Лев Толстой — о любви, которая остаётся с тобой</div>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Данные о точках (тексты из вашего описания)
-    const places = [
-        {
-            id: 1,
-            name: 'Станция «Козлова Засека»',
-            coords: [54.0747, 37.5233], // примерные координаты (нужно уточнить)
-            description: 'Звук поезда издалека, он проходит мимо и затихает. Ветер.',
-            fullText: `Мы стоим на станции Козлова Засека. Здесь так тихо и уютно, что кажется, будто время остановилось. И если закрыть глаза, можно представить, как больше ста лет назад сюда подходил поезд, и из вагона выходил человек в простой рубахе, с бородой и очень добрыми глазами.
-Это Лев Николаевич Толстой. Он жил рядом, в Ясной Поляне. Отсюда уезжал в Москву, сюда возвращался. И каждый раз, наверное, думал: как хорошо дома, как пахнет земля и трава.
-А однажды в Москве с ним случилось то, что перевернуло всё. Он пошёл помогать бедным людям. Ходил по ночлежкам, давал деньги. И вдруг почувствовал: ему стыдно. Представляете? Он хотел как лучше, а чувствовал себя почти преступником.
-Потому что понял: когда просто даёшь монетку, человек краснеет, отворачивается. Помощь может унижать, если смотреть на того, кому помогаешь, сверху вниз. Толстой написал об этом так: «Я дал ему рубль... и он взял, но... мне показалось, что он покраснел. И мне стало так больно, гадко...»
-И он задумался: как же помочь так, чтобы не ранить? Чтобы любовь была настоящей?
-Пойдёмте искать ответ.`,
-            audio: 'audio/1.mp3',
-            images: ['images/1.jpg', 'images/11.jpg']
-        },
-        {
-            id: 2,
-            name: 'Ясная Поляна',
-            coords: [54.0751, 37.5263],
-            description: 'Птицы, тишина, ветер.',
-            fullText: `Мы в Ясной Поляне. Здесь так красиво, что хочется дышать глубоко-глубоко. Эти деревья помнят Толстого. По этим дорожкам он ходил и думал о самом важном.
-И он придумал такой образ. Представьте дерево. Оно растёт само, у него корни, ствол, живые ветки. А на нём созревают плоды. Это и есть настоящая доброта. 
-Нельзя привязать яблоки к сухой палке и сказать: «Смотрите, яблоки выросли!». Так и с добром. Если помогать отстранённо, просто «отвязаться»: кинул монетку и забыл, сделал для галочки и пошёл дальше, - это как яблоко на сухой палке. Вроде красиво, а внутри пусто.
-Толстой понял: доброта должна идти изнутри, как сок в дереве. Когда ты по-настоящему чувствуешь того, кому помогаешь, когда ты с ним рядом, когда тебе не всё равно, - тогда и плоды настоящие.
-Но знаете, что меня поразило? Он не стал ждать, пока станет идеальным. Потому что вокруг люди голодали, дети плакали. И в 1891 году он поехал в деревню - открывать бесплатные столовые, кормить умирающих. Он написал тогда удивительные слова: «Тут много не того, что должно быть... тут греха конца нет, но не могу жить дома, писать. Чувствую потребность участвовать, что-то делать».
-«Не могу не делать». Даже если не идеально, даже если сомневаешься - но если рядом кому-то плохо, надо просто быть рядом. Это, кажется, самое главное.`,
-            audio: 'audio/2.mp3',
-            images: ['images/2.jpg', 'images/22.jpg']
-        },
-        {
-            id: 3,
-            name: 'Памятник Толстому и новый сквер',
-            coords: [54.1942, 37.6184], // центр Тулы
-            description: 'Фонтан, детские голоса, городской шум.',
-            fullText: `Мы в центре Тулы, у памятника. Посмотрите, какой Толстой - не сидит важно, а идёт. Шагает по городу, как будто хочет быть с нами.
-А вокруг новый сквер. Скамейки, качели, цитаты из его книг. Здесь можно посидеть, отдохнуть, прочитать его плакаты. И даже музыку послушать, которую он любил, - QR-коды есть. Мне кажется, ему бы понравилось. Что доброта и взаимопомощь друг другу стала просто частью нашей жизни, незаметной, как воздух.`,
-            audio: 'audio/3.mp3',
-            images: ['images/3.jpg', 'images/33.jpg']
-        },
-        {
-            id: 4,
-            name: 'Молодёжный центр «Родина»',
-            coords: [54.2058, 37.6189],
-            description: 'Спокойная, современная музыка.',
-            fullText: `А это место - молодёжный центр «Родина». Здесь собираются волонтёры, и те, кто хочет помогать.
-И сейчас я расскажу вам одну историю, которая для меня очень личная. У меня есть младший брат, и его зовут Лев. В честь Толстого. Ему восемь лет. Однажды в школе объявили акцию «Письмо солдату». И Лев достал свои самые лучшие ручки с глиттером - те, которые обычно бережёт, потому что они быстро заканчиваются. Выбрал самые красивые наклейки. И старательно вывел: «Вернись живым». А внизу нарисовал человечков. У них были нахмуренные брови и огромные улыбки. Такие смешные.
-И я смотрела на него и думала: он не задаёт себе вопросов «достаточно ли я добрый?», «не ради ли похвалы я это делаю?». Он просто рисует. Потому что хочет, чтобы солдату стало теплее.
-И тогда я поняла. Такая открытка - это маленький кирпичик. Сама по себе она крошечная. Но если сложить тысячу таких кирпичиков, получится стена. Стена добра, защиты, поддержки. Мы все, когда приносим корм животным, или помогаем кому-то, или просто улыбаемся, - мы кладём свои кирпичики. И без каждого из них стена была бы чуточку слабее.`,
-            audio: 'audio/4.mp3',
-            images: ['images/4.jpg', 'images/44.jpg']
-        },
-        {
-            id: 5,
-            name: 'Музей Л.Н. Толстого',
-            coords: [54.1972, 37.6202],
-            description: 'Тишина, потом голос Толстого.',
-            fullText: `Мы в музее. Здесь хранятся его книги, рукописи. Но есть чудо, которое нельзя увидеть глазами, - его голос. Больше ста лет назад его записали на восковой валик фонографа. Сейчас мы его услышим. (Звук записи) Слышите? Он говорит с нами из другого времени. И у него есть слова, которые для меня теперь самые главные: «Любовь - это единственная вещь, которую, отдавая, ты оставляешь себе».
-Как это? Представьте свечу. Если от неё зажечь другую, разве первая станет гореть слабее? Нет. Так и с любовью. Когда мы делимся ею, её внутри нас становится только больше.`,
-            audio: 'audio/5.mp3',
-            images: ['images/5.jpg', 'images/55.jpg']
-        },
-        {
-            id: 6,
-            name: 'Мурал на улице Октябрьской',
-            coords: [54.2091, 37.6235],
-            description: 'Улица, вечер, или тихая музыка.',
-            fullText: `Последняя остановка. Улица Октябрьская, дом 9а. На стене - огромный портрет Льва Николаевича. А внизу слова: «Сильные люди всегда просты».
-Мне кажется, это про него. И про всех нас. Потому что для доброты не нужно быть особенным. Не нужно быть героем или святым. Достаточно просто хотеть, чтобы другому было хорошо. Это так просто - и так трудно одновременно.
-Потому что, когда мы перестаём думать «достаточно ли я хорош», а просто делаем маленькие шаги, на смену сомнениям приходит тихая радость. Та самая, о которой говорил Толстой: любовь, которую отдаёшь, остаётся с тобой.
-И ещё мне очень хочется, чтобы мы помнили: даже если кажется, что твоё дело не заметно, что ты мало что можешь, - вместе мы огромная сила. Каждый наш маленький кирпичик складывается в большую стену добра. И мы все хотим быть простыми, не гордыми, а просто людьми, которые умеют любить и помогать.`,
-            audio: 'audio/6.mp3',
-            images: ['images/6.jpg', 'images/66.jpg']
-        },
-        {
-            id: 7,
-            name: 'Эпилог. Московский вокзал',
-            coords: [54.2063, 37.6248],
-            description: 'Звук поезда вдалеке.',
-            fullText: `Когда-нибудь, когда вы будете уезжать с Московского вокзала, посмотрите на его здание от путей. На нем есть скромная табличка. На ней написано: «На этом вокзале многократно бывал Л. Н. Толстой. В 1879 году он встречал здесь И. С. Тургенева».
-Это маленькая табличка, на которую многие не обращают внимания. Но она - тоже кирпичик. Всё большое начинается с малого. С одной встречи, с одного рисунка, с одной улыбки.
-Спасибо, что прошли этот путь со мной. До новых встреч!`,
-            audio: 'audio/7.mp3',
-            images: ['images/7.jpg']
-        }
-    ];
-
-    // Глобальные переменные
-    let map, placemarks = [];
-
-    // Инициализация карты после загрузки API
-    ymaps.ready(() => {
-        map = new ymaps.Map('map', {
-            center: [54.1961, 37.6182], // центр Тулы
-            zoom: 12,
-            controls: ['zoomControl', 'fullscreenControl']
-        });
-
-        // Добавляем метки
-        places.forEach(place => {
-            const placemark = new ymaps.Placemark(place.coords, {
-                hintContent: place.name,
-                balloonContent: `<strong>${place.name}</strong><br>${place.description}`
-            }, {
-                preset: 'islands#dotIcon',
-                iconColor: '#8e44ad'
+        // Инициализация карты после загрузки API
+        ymaps.ready(() => {
+            map = new ymaps.Map('map', {
+                center: [54.1961, 37.6182],
+                zoom: 12,
+                controls: ['zoomControl', 'fullscreenControl']
             });
 
-            placemark.events.add('click', () => {
-                showInfo(place);
-                // подсветка активного пункта в списке
-                highlightActivePlace(place.id);
+            // Добавляем метки
+            places.forEach(place => {
+                const placemark = new ymaps.Placemark(place.coords, {
+                    hintContent: place.name,
+                    balloonContent: `<strong>${place.name}</strong><br>${place.description}`
+                }, {
+                    preset: 'islands#dotIcon',
+                    iconColor: '#7d5d3a'  // под цвет книги
+                });
+
+                placemark.events.add('click', () => {
+                    showInfo(place);
+                    highlightActivePlace(place.id);
+                });
+
+                map.geoObjects.add(placemark);
+                placemarks.push(placemark);
             });
 
-            map.geoObjects.add(placemark);
-            placemarks.push(placemark);
-        });
+            // Заполняем список точек
+            fillPlacesList();
 
-        // Заполняем список точек
-        fillPlacesList();
-
-        // Показываем первую точку по умолчанию
-        if (places.length > 0) {
-            showInfo(places[0]);
-            highlightActivePlace(places[0].id);
-        }
-    });
-
-    // Функция заполнения списка
-    function fillPlacesList() {
-        const list = document.getElementById('places-list');
-        list.innerHTML = '';
-        places.forEach(place => {
-            const li = document.createElement('li');
-            li.textContent = place.name;
-            li.dataset.id = place.id;
-            li.addEventListener('click', () => {
-                // Центрируем карту на точке
-                map.setCenter(place.coords, 15, {duration: 300});
-                showInfo(place);
-                highlightActivePlace(place.id);
-                // Открыть балун (опционально)
-                // placemarks[place.id-1].balloon.open();
-            });
-            list.appendChild(li);
-        });
-    }
-
-    // Подсветка активного элемента списка
-    function highlightActivePlace(id) {
-        document.querySelectorAll('.places-list li').forEach(li => {
-            li.classList.remove('active');
-            if (parseInt(li.dataset.id) === id) {
-                li.classList.add('active');
+            // Показываем первую точку по умолчанию
+            if (places.length > 0) {
+                showInfo(places[0]);
+                highlightActivePlace(places[0].id);
             }
         });
-    }
 
-    // Отображение подробной информации в панели
-    function showInfo(place) {
-        document.getElementById('info-title').textContent = place.name;
-        document.getElementById('info-sub').textContent = place.description;
+        function fillPlacesList() {
+            const list = document.getElementById('places-list');
+            list.innerHTML = '';
+            places.forEach(place => {
+                const li = document.createElement('li');
+                li.textContent = place.name;
+                li.dataset.id = place.id;
+                li.addEventListener('click', () => {
+                    map.setCenter(place.coords, 15, {duration: 300});
+                    showInfo(place);
+                    highlightActivePlace(place.id);
+                });
+                list.appendChild(li);
+            });
+        }
 
-        const contentDiv = document.getElementById('info-content');
-        // Галерея фото
-        let galleryHtml = '<div class="photo-gallery">';
-        place.images.forEach(img => {
-            galleryHtml += `<img src="${img}" alt="${place.name}" loading="lazy">`;
-        });
-        galleryHtml += '</div>';
+        function highlightActivePlace(id) {
+            document.querySelectorAll('.places-list li').forEach(li => {
+                li.classList.remove('active');
+                if (parseInt(li.dataset.id) === id) {
+                    li.classList.add('active');
+                }
+            });
+        }
 
-        // Полный текст
-        const textHtml = `<div class="place-fulltext">${place.fullText.replace(/\n/g, '<br>')}</div>`;
+        function showInfo(place) {
+            document.getElementById('info-title').textContent = place.name;
+            document.getElementById('info-sub').textContent = place.description;
 
-        // Аудиоплеер
-        const audioHtml = `<audio controls src="${place.audio}" class="audio-player"></audio>`;
+            const contentDiv = document.getElementById('info-content');
+            // Галерея фото
+            let galleryHtml = '<div class="photo-gallery">';
+            place.images.forEach(img => {
+                galleryHtml += `<img src="${img}" alt="${place.name}" loading="lazy">`;
+            });
+            galleryHtml += '</div>';
 
-        contentDiv.innerHTML = galleryHtml + textHtml + audioHtml;
-    }
-</script>
+            // Полный текст
+            const textHtml = `<div class="place-fulltext">${place.fullText.replace(/\n/g, '<br>')}</div>`;
+
+            // Аудиоплеер
+            const audioHtml = `<audio controls src="${place.audio}" class="audio-player"></audio>`;
+
+            contentDiv.innerHTML = galleryHtml + textHtml + audioHtml;
+        }
+    </script>
 </body>
 </html>
