@@ -654,4 +654,52 @@
             document.getElementById('info-title').textContent = place.name;
             document.getElementById('info-sub').textContent = place.description;
 
-            const content
+            const contentDiv = document.getElementById('info-content');
+            
+            // Галерея фото
+            let galleryHtml = '<div class="photo-gallery">';
+            place.images.forEach(img => {
+                galleryHtml += `<img src="${img}" alt="${place.name}" loading="lazy">`;
+            });
+            galleryHtml += '</div>';
+
+            // Текст с выделенными цитатами
+            const highlightedText = highlightTolstoyQuotes(place.fullText);
+            const textHtml = `<div class="place-fulltext">${highlightedText.replace(/\n/g, '<br>')}</div>`;
+
+            // Аудиоплеер
+            const audioHtml = `<audio controls src="${place.audio}" class="audio-player"></audio>`;
+
+            contentDiv.innerHTML = galleryHtml + textHtml + audioHtml;
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Для сайдбара (списка точек)
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarTitle = sidebar?.querySelector('h2');
+            
+            if (sidebarTitle) {
+                sidebarTitle.addEventListener('click', function() {
+                    sidebar.classList.toggle('expanded');
+                });
+            }
+            
+            // Для информационной панели
+            const infoPanel = document.querySelector('.info-panel');
+            const infoHeader = document.querySelector('.info-header');
+            
+            if (infoHeader) {
+                infoHeader.addEventListener('click', function() {
+                    infoPanel.classList.toggle('expanded');
+                });
+            }
+            
+            // Закрытие панелей при клике на карту
+            document.getElementById('map').addEventListener('click', function() {
+                if (sidebar) sidebar.classList.remove('expanded');
+                if (infoPanel) infoPanel.classList.remove('expanded');
+            });
+        });
+    </script>
+</body>
+</html>
