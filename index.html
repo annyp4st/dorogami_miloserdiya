@@ -866,7 +866,7 @@
                 'images/77.jpg': '«Сильные люди всегда просты»',
                 
                 // Точка 8: Московский вокзал
-                'images/888.jpg': 'Курский вокзал в Туле (ныне Московский), 1908 г.'
+                'images/888.jpg': 'Курский вокзал в Туле (ныне Московский), 1908 г.',
                 'images/8.jpg': 'Московский вокзал, 2026 г.',
                 'images/88.jpg': '«На этом вокзале многократно бывал Л. Н. Толстой. В 1879 году он встречал здесь И. С. Тургенева»'
             };
@@ -891,9 +891,9 @@
             
             place.images.forEach((img, index) => {
                 const caption = getPhotoCaption(img);
-                // Используем data-атрибуты для безопасной передачи данных
+                // Используем encodeURIComponent для безопасной передачи данных
                 galleryHtml += `
-                    <div class="photo-item" data-images='${JSON.stringify(place.images).replace(/'/g, "&apos;")}' data-index="${index}">
+                    <div class="photo-item" data-images="${encodeURIComponent(JSON.stringify(place.images))}" data-index="${index}">
                         <img src="${img}" alt="${place.name}" loading="lazy">
                         ${caption ? `<div class="photo-caption">${caption}</div>` : ''}
                     </div>
@@ -915,7 +915,7 @@
             contentDiv.querySelectorAll('.photo-item').forEach(item => {
                 item.addEventListener('click', function() {
                     try {
-                        const images = JSON.parse(this.dataset.images.replace(/&apos;/g, "'"));
+                        const images = JSON.parse(decodeURIComponent(this.dataset.images));
                         const index = parseInt(this.dataset.index);
                         window.openLightbox(images, index);
                     } catch (e) {
