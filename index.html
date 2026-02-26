@@ -548,20 +548,32 @@
                 border-top: 2px solid #cbb99b;
                 z-index: 30;
                 transition: transform 0.3s ease;
-                transform: translateY(calc(100% - 80px));
+                transform: translateY(calc(100% - 60px));
                 background: rgba(245, 235, 215, 0.95);
                 backdrop-filter: blur(10px);
+                will-change: transform;
+                touch-action: none;
             }
             
             .info-panel.expanded {
                 transform: translateY(0);
                 max-height: 80vh;
             }
+
+            .info-panel.dragging {
+                transition: none;
+            }
             
             .info-header {
-                padding: 16px 22px;
-                cursor: pointer;
+                padding: 12px 22px;
+                cursor: grab;
                 position: relative;
+                user-select: none;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .info-header:active {
+                cursor: grabbing;
             }
             
             .info-header::before {
@@ -658,7 +670,7 @@
 
             <!-- Панель с информацией -->
             <div class="info-panel" id="info-panel">
-                <div class="info-header">
+                <div class="info-header" id="info-header">
                     <h3 id="info-title">Музейно-вокзальный комплекс «Козлова Засека»</h3>
                     <div class="place-sub" id="info-sub">начало пути</div>
                 </div>
@@ -743,7 +755,7 @@
                 description: 'Место прощаний и встреч',
                 fullText: `Когда-нибудь, когда вы будете уезжать с Московского вокзала, посмотрите на его здание от путей. На нём есть скромная табличка. На ней написано: «На этом вокзале многократно бывал Л. Н. Толстой. В 1879 году он встречал здесь И. С. Тургенева».\n\nЭто маленькая табличка, на которую многие не обращают внимания. Но она - тоже кирпичик. Всё большое начинается с малого. С одной встречи, с одного рисунка, с одной улыбки.\n\nСпасибо, что прошли этот путь со мной. До новых встреч!`,
                 audio: 'audio/8.mp3',
-                images: ['images/8.jpg']
+                images: ['images/888.jpg', 'images/8.jpg', 'images/88.jpg']
             }
         ];
 
@@ -799,7 +811,7 @@
 
         // Обработчики лайтбокса
         lightboxClose.addEventListener('click', closeLightbox);
-        lightboxPrev.addEventListener('click', nextImage);
+        lightboxPrev.addEventListener('click', prevImage);
         lightboxNext.addEventListener('click', nextImage);
 
         lightbox.addEventListener('click', (e) => {
@@ -854,7 +866,9 @@
                 'images/77.jpg': '«Сильные люди всегда просты»',
                 
                 // Точка 8: Московский вокзал
-                'images/8.jpg': 'Курский вокзал в Туле (ныне Московский), 1908 г.'
+                'images/888.jpg': 'Курский вокзал в Туле (ныне Московский), 1908 г.'
+                'images/8.jpg': 'Московский вокзал, 2026 г.',
+                'images/88.jpg': '«На этом вокзале многократно бывал Л. Н. Толстой. В 1879 году он встречал здесь И. С. Тургенева»'
             };
             
             return captions[imgFile] || '';
@@ -972,7 +986,7 @@
             });
         }
 
-        // Мобильные обработчики
+        // Мобильные обработчики и drag & drop для панели
         document.addEventListener('DOMContentLoaded', function() {
             const sidebar = document.querySelector('.sidebar');
             const sidebarTitle = sidebar?.querySelector('h2');
@@ -983,18 +997,148 @@
                 });
             }
             
-            const infoPanel = document.querySelector('.info-panel');
-            const infoHeader = document.querySelector('.info-header');
+            const infoPanel = document.getElementById('info-panel');
+            const infoHeader = document.getElementById('info-header');
             
+            if (window.innerWidth <= 900) {
+                let startY = 0;
+                let startTransform = 0;
+                let isDragging = false;
+                
+                // Функция для получения текущей позиции панели
+                function getPanelTransform() {
+                    const transform = window.getComputedStyle(infoPanel).transform;
+                    if (transform === 'none') return 0;
+                    
+                    const matrix = transform.match(/matrix.*\((.+)\)/);
+                    if (matrix) {
+                        const values = matrix[1].split(', ');
+                        return parseFloat(values[5]) || 0; // translateY
+                    }
+                    return 0;
+                }
+                
+                // Функция для обновления позиции панели
+                function setPanelTransform(y) {
+                    const maxTransform = 0; // полностью открыта
+                    const minTransform = infoPanel.offsetHeight - 60; // закрыта (видна только полоска)
+                    
+                    // Ограничиваем значения
+                    y = Math.max(minTransform, Math.min(maxTransform, y));
+                    
+                    infoPanel.style.transform = `translateY(${y}px)`;
+                }
+                
+                // Обработчики touch-событий
+                infoHeader.addEventListener('touchstart', (e) => {
+                    startY = e.touches[0].clientY;
+                    startTransform = getPanelTransform();
+                    isDragging = true;
+                    infoPanel.classList.add('dragging');
+                    e.preventDefault(); // предотвращаем прокрутку страницы
+                }, { passive: false });
+                
+                infoHeader.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    
+                    const currentY = e.touches[0].clientY;
+                    const deltaY = currentY - startY;
+                    const newTransform = startTransform + deltaY;
+                    
+                    setPanelTransform(newTransform);
+                    e.preventDefault();
+                }, { passive: false });
+                
+                infoHeader.addEventListener('touchend', (e) => {
+                    if (!isDragging) return;
+                    
+                    isDragging = false;
+                    infoPanel.classList.remove('dragging');
+                    
+                    const currentTransform = getPanelTransform();
+                    const panelHeight = infoPanel.offsetHeight;
+                    const threshold = panelHeight * 0.3; // 30% высоты для переключения
+                    
+                    // Определяем, в какое положение должна перейти панель
+                    if (currentTransform < -threshold) {
+                        // Открываем полностью
+                        infoPanel.classList.add('expanded');
+                        infoPanel.style.transform = '';
+                    } else if (currentTransform > panelHeight - 60 - threshold) {
+                        // Закрываем
+                        infoPanel.classList.remove('expanded');
+                        infoPanel.style.transform = '';
+                    } else {
+                        // Возвращаем в ближайшее положение
+                        if (infoPanel.classList.contains('expanded')) {
+                            infoPanel.style.transform = '';
+                        } else {
+                            infoPanel.style.transform = '';
+                        }
+                    }
+                });
+                
+                // Также добавляем поддержку мыши для тестирования на компьютере
+                infoHeader.addEventListener('mousedown', (e) => {
+                    if (window.innerWidth > 900) return;
+                    
+                    startY = e.clientY;
+                    startTransform = getPanelTransform();
+                    isDragging = true;
+                    infoPanel.classList.add('dragging');
+                    e.preventDefault();
+                });
+                
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDragging || window.innerWidth > 900) return;
+                    
+                    const currentY = e.clientY;
+                    const deltaY = currentY - startY;
+                    const newTransform = startTransform + deltaY;
+                    
+                    setPanelTransform(newTransform);
+                });
+                
+                document.addEventListener('mouseup', () => {
+                    if (!isDragging || window.innerWidth > 900) return;
+                    
+                    isDragging = false;
+                    infoPanel.classList.remove('dragging');
+                    
+                    const currentTransform = getPanelTransform();
+                    const panelHeight = infoPanel.offsetHeight;
+                    const threshold = panelHeight * 0.3;
+                    
+                    if (currentTransform < -threshold) {
+                        infoPanel.classList.add('expanded');
+                        infoPanel.style.transform = '';
+                    } else if (currentTransform > panelHeight - 60 - threshold) {
+                        infoPanel.classList.remove('expanded');
+                        infoPanel.style.transform = '';
+                    } else {
+                        if (infoPanel.classList.contains('expanded')) {
+                            infoPanel.style.transform = '';
+                        } else {
+                            infoPanel.style.transform = '';
+                        }
+                    }
+                });
+            }
+            
+            // Клик по заголовку для быстрого переключения (оставляем как запасной вариант)
             if (infoHeader) {
-                infoHeader.addEventListener('click', function() {
+                infoHeader.addEventListener('click', function(e) {
+                    // Не переключаем, если это был drag
+                    if (infoPanel.classList.contains('dragging')) return;
                     infoPanel.classList.toggle('expanded');
                 });
             }
             
             document.getElementById('map').addEventListener('click', function() {
                 if (sidebar) sidebar.classList.remove('expanded');
-                if (infoPanel) infoPanel.classList.remove('expanded');
+                if (infoPanel && window.innerWidth <= 900) {
+                    infoPanel.classList.remove('expanded');
+                }
             });
         });
     </script>
