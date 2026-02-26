@@ -714,7 +714,7 @@
                 name: 'Молодёжный центр «Родина»',
                 coords: [54.190706, 37.614389],
                 description: 'Здесь рождаются добрые дела',
-                fullText: `А это место - молодёжный центр «Родина». Здесь собираются волонтёры и те, кто хочет помогать.\n\nИ сейчас я расскажу вам одну историю, которая для меня очень личная. У меня есть младший брат, и его зовут Лев. В честь Толстого. Ему восемь лет. Когда в школе объявляют акцию «Письмо солдату». И Лев всегдла достает свои самые лучшие ручки с глиттером - те, которые обычно бережёт, потому что они быстро заканчиваются. Выбрает самые красивые наклейки. И старательно выводит: «Вернись живым». А внизу рисует человечков. У них нахмуренные брови и огромные улыбки. Такие трогательные!\n\nИ я смотрела на него и думала: он не задаёт себе вопросов «достаточно ли я добрый?», «не ради ли похвалы я это делаю?». Он просто рисует. Потому что хочет, чтобы солдату стало теплее, чтобы он знал-его ждут!.\n\nИ тогда я поняла. Такая открытка - это маленький кирпичик. Сама по себе она крошечная. Но если сложить тысячу таких кирпичиков, получится стена. Стена добра, защиты, поддержки. Мы все, когда приносим корм животным, или помогаем кому-то, или просто улыбаемся - мы кладём свои кирпичики. И без каждого из них стена была бы чуточку слабее.`,
+                fullText: `А это место - молодёжный центр «Родина». Здесь собираются волонтёры и те, кто хочет помогать.\n\nИ сейчас я расскажу вам одну историю, которая для меня очень личная. У меня есть младший брат, и его зовут Лев. В честь Толстого. Ему восемь лет. Когда в школе объявляют акцию «Письмо солдату». И Лев всегдла достает свои самые лучшие ручки с глиттером - те, которые обычно бережёт, потому что они быстро заканчиваются. Выбирает самые красивые наклейки. И старательно выводит: «Вернись живым». А внизу рисует человечков. У них нахмуренные брови и огромные улыбки. Такие трогательные!\n\nИ я смотрела на него и думала: он не задаёт себе вопросов «достаточно ли я добрый?», «не ради ли похвалы я это делаю?». Он просто рисует. Потому что хочет, чтобы солдату стало теплее, чтобы он знал-его ждут!.\n\nИ тогда я поняла. Такая открытка - это маленький кирпичик. Сама по себе она крошечная. Но если сложить тысячу таких кирпичиков, получится стена. Стена добра, защиты, поддержки. Мы все, когда приносим корм животным, или помогаем кому-то, или просто улыбаемся - мы кладём свои кирпичики. И без каждого из них стена была бы чуточку слабее.`,
                 audio: 'audio/5.mp3',
                 images: ['images/5.jpg', 'images/55.jpg', 'images/555.jpg']
             },
@@ -749,7 +749,9 @@
 
         // ==================== КАРТА И ЛОГИКА ====================
         let map, placemarks = [];
-        let currentImages = []; // для лайтбокса
+        
+        // ===== ЛАЙТБОКС =====
+        let currentImages = [];
         let currentImageIndex = 0;
 
         // Элементы лайтбокса
@@ -760,72 +762,156 @@
         const lightboxPrev = document.getElementById('lightbox-prev');
         const lightboxNext = document.getElementById('lightbox-next');
 
-        // Функции лайтбокса
-        function openLightbox(images, index) {
+        // Глобальные функции для лайтбокса
+        window.openLightbox = function(images, index) {
             currentImages = images;
             currentImageIndex = index;
             updateLightbox();
             lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden'; // запрещаем прокрутку страницы
-        }
+            document.body.style.overflow = 'hidden';
+        };
 
-        function closeLightbox() {
+        window.closeLightbox = function() {
             lightbox.classList.remove('active');
-            document.body.style.overflow = ''; // возвращаем прокрутку
-        }
+            document.body.style.overflow = '';
+        };
 
         function updateLightbox() {
-            if (currentImages.length === 0) return;
-            const imgFile = currentImages[currentImageIndex];
-            lightboxImg.src = imgFile;
+            if (!currentImages.length) return;
+            lightboxImg.src = currentImages[currentImageIndex];
+            lightboxCaption.textContent = getPhotoCaption(currentImages[currentImageIndex]) || 'Фотография';
             
-            // Получаем подпись для фото
-            const caption = getPhotoCaption(imgFile);
-            lightboxCaption.textContent = caption || 'Фотография';
-            
-            // Показываем/скрываем стрелки навигации
             lightboxPrev.style.display = currentImages.length > 1 ? 'flex' : 'none';
             lightboxNext.style.display = currentImages.length > 1 ? 'flex' : 'none';
         }
 
-        function nextImage() {
-            if (currentImages.length === 0) return;
+        window.nextImage = function() {
+            if (!currentImages.length) return;
             currentImageIndex = (currentImageIndex + 1) % currentImages.length;
             updateLightbox();
-        }
+        };
 
-        function prevImage() {
-            if (currentImages.length === 0) return;
+        window.prevImage = function() {
+            if (!currentImages.length) return;
             currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
             updateLightbox();
-        }
+        };
 
         // Обработчики лайтбокса
         lightboxClose.addEventListener('click', closeLightbox);
-        lightboxPrev.addEventListener('click', prevImage);
+        lightboxPrev.addEventListener('click', nextImage);
         lightboxNext.addEventListener('click', nextImage);
 
-        // Закрытие по клику вне изображения
         lightbox.addEventListener('click', (e) => {
             if (e.target === lightbox) {
                 closeLightbox();
             }
         });
 
-        // Закрытие по ESC
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+            if (!lightbox.classList.contains('active')) return;
+            
+            if (e.key === 'Escape') {
                 closeLightbox();
-            }
-            if (lightbox.classList.contains('active')) {
-                if (e.key === 'ArrowRight') {
-                    nextImage();
-                } else if (e.key === 'ArrowLeft') {
-                    prevImage();
-                }
+            } else if (e.key === 'ArrowRight') {
+                nextImage();
+            } else if (e.key === 'ArrowLeft') {
+                prevImage();
             }
         });
 
+        // Функция для получения подписи к фото
+        function getPhotoCaption(imgFile) {
+            const captions = {
+                // Точка 1: Козлова Засека
+                'images/1.jpg': 'Козлова Засека сегодня',
+                'images/11.jpg': 'Станция Козлова Засека, 1883 г.',
+                
+                // Точка 2: Ясная Поляна
+                'images/2.jpg': 'Дом Л.Н. Толстого в Ясной Поляне',
+                'images/22.jpg': 'Л.Н. Толстой с дочерью Александрой, 1908 г. Фото В. Черткова',
+                
+                // Точка 3: Толстовский сквер
+                'images/3.jpg': 'Памятник Л.Н. Толстому в сквере',
+                'images/33.jpg': 'Толстовский сквер',
+                'images/333.jpg': 'Памятник Л.Н. Толстому',
+                
+                // Точка 4: Ликёрка-Лофт
+                'images/4.jpg': 'Граффити на трубе в Ликёрка-Лофт',
+                'images/44.jpg': 'Территория креативного пространства «Ликёрка-Лофт»',
+                
+                // Точка 5: Молодёжный центр «Родина»
+                'images/5.jpg': 'Молодёжный центр «Родина»',
+                'images/55.jpg': 'Волонтёры Тулы',
+                'images/555.jpg': 'Мой младший брат Лев (в центре) с одноклассниками принимает участие в акции «Письмо солдату»',
+                
+                // Точка 6: Музей на Металлистов
+                'images/6.jpg': 'Музей на улице Металлистов',
+                'images/66.jpg': 'Телефон с записью голоса Толстого',
+                
+                // Точка 7: Граффити на Октябрьской
+                'images/7.jpg': 'Граффити на Октябрьской, 49',
+                'images/77.jpg': '«Сильные люди всегда просты»',
+                
+                // Точка 8: Московский вокзал
+                'images/8.jpg': 'Курский вокзал в Туле (ныне Московский), 1908 г.'
+            };
+            
+            return captions[imgFile] || '';
+        }
+
+        // Функция для выделения цитат
+        function highlightTolstoyQuotes(text) {
+            return text.replace(/«([^»]{30,})»/g, '<span class="tolstoy-quote">«$1»</span>');
+        }
+
+        // Функция отображения информации о месте
+        function showInfo(place) {
+            document.getElementById('info-title').textContent = place.name;
+            document.getElementById('info-sub').textContent = place.description;
+
+            const contentDiv = document.getElementById('info-content');
+            
+            // Галерея фото с подписями
+            let galleryHtml = '<div class="photo-gallery">';
+            
+            place.images.forEach((img, index) => {
+                const caption = getPhotoCaption(img);
+                // Используем data-атрибуты для безопасной передачи данных
+                galleryHtml += `
+                    <div class="photo-item" data-images='${JSON.stringify(place.images).replace(/'/g, "&apos;")}' data-index="${index}">
+                        <img src="${img}" alt="${place.name}" loading="lazy">
+                        ${caption ? `<div class="photo-caption">${caption}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            galleryHtml += '</div>';
+
+            // Текст с выделенными цитатами
+            const highlightedText = highlightTolstoyQuotes(place.fullText);
+            const textHtml = `<div class="place-fulltext">${highlightedText.replace(/\n/g, '<br>')}</div>`;
+
+            // Аудиоплеер
+            const audioHtml = `<audio controls src="${place.audio}" class="audio-player"></audio>`;
+
+            contentDiv.innerHTML = galleryHtml + textHtml + audioHtml;
+
+            // Добавляем обработчики для фото
+            contentDiv.querySelectorAll('.photo-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    try {
+                        const images = JSON.parse(this.dataset.images.replace(/&apos;/g, "'"));
+                        const index = parseInt(this.dataset.index);
+                        window.openLightbox(images, index);
+                    } catch (e) {
+                        console.error('Ошибка при открытии фото:', e);
+                    }
+                });
+            });
+        }
+
+        // Инициализация карты
         ymaps.ready(() => {
             map = new ymaps.Map('map', {
                 center: [54.176233, 37.597356],
@@ -859,6 +945,7 @@
             }
         });
 
+        // Заполнение списка мест
         function fillPlacesList() {
             const list = document.getElementById('places-list');
             list.innerHTML = '';
@@ -875,6 +962,7 @@
             });
         }
 
+        // Подсветка активного места
         function highlightActivePlace(id) {
             document.querySelectorAll('.places-list li').forEach(li => {
                 li.classList.remove('active');
@@ -884,80 +972,7 @@
             });
         }
 
-        function highlightTolstoyQuotes(text) {
-            return text.replace(/«([^»]{30,})»/g, '<span class="tolstoy-quote">«$1»</span>');
-        }
-
-        function getPhotoCaption(imgFile) {
-            const captions = {
-                // Точка 1: Козлова Засека
-                'images/1.jpg': 'Козлова Засека сегодня',
-                'images/11.jpg': 'Станция Козлова Засека, 1883 г.',
-                
-                // Точка 2: Ясная Поляна
-                'images/2.jpg': 'Дом Л.Н. Толстого в Ясной Поляне',
-                'images/22.jpg': 'Л.Н. Толстой с дочерью Александрой, 1908 г. Фото В. Черткова',
-                
-                // Точка 3: Толстовский сквер
-                'images/3.jpg': 'Памятник Л.Н. Толстому в сквере',
-                'images/33.jpg': 'Толстовский сквер',
-                'images/333.jpg': 'Памятник Л.Н. Толстому',
-                
-                // Точка 4: Ликёрка-Лофт
-                'images/4.jpg': 'Граффити на трубе в Ликёрка-Лофт',
-                'images/44.jpg': 'Территория креативного пространства «Ликёрка-Лофт»',
-                
-                // Точка 5: Молодёжный центр «Родина»
-                'images/5.jpg': 'Молодёжный центр «Родина»',
-                'images/55.jpg': 'Волонтёры Тулы',
-                'images/555.jpg': 'Мой младший брат Лев (в центре) с одноклассниками принимает участие акции «Письмо солдату»',
-                
-                // Точка 6: Музей на Металлистов
-                'images/6.jpg': 'Музей на улице Металлистов',
-                'images/66.jpg': 'Телефон с записью голоса Толстого',
-                
-                // Точка 7: Граффити на Октябрьской
-                'images/7.jpg': 'Граффити на Октябрьской, 49',
-                'images/77.jpg': '«Сильные люди всегда просты»',
-                
-                // Точка 8: Московский вокзал
-                'images/8.jpg': 'Курский вокзал в Туле (ныне Московский), 1908 г.'
-            };
-            
-            return captions[imgFile] || '';
-        }
-
-        function showInfo(place) {
-            document.getElementById('info-title').textContent = place.name;
-            document.getElementById('info-sub').textContent = place.description;
-
-            const contentDiv = document.getElementById('info-content');
-            
-            // Галерея фото с подписями
-            let galleryHtml = '<div class="photo-gallery">';
-            
-            place.images.forEach((img, index) => {
-                const caption = getPhotoCaption(img);
-                galleryHtml += `
-                    <div class="photo-item" onclick="openLightbox(${JSON.stringify(place.images)}, ${index})">
-                        <img src="${img}" alt="${place.name}" loading="lazy">
-                        ${caption ? `<div class="photo-caption">${caption}</div>` : ''}
-                    </div>
-                `;
-            });
-            
-            galleryHtml += '</div>';
-
-            // Текст с выделенными цитатами
-            const highlightedText = highlightTolstoyQuotes(place.fullText);
-            const textHtml = `<div class="place-fulltext">${highlightedText.replace(/\n/g, '<br>')}</div>`;
-
-            // Аудиоплеер
-            const audioHtml = `<audio controls src="${place.audio}" class="audio-player"></audio>`;
-
-            contentDiv.innerHTML = galleryHtml + textHtml + audioHtml;
-        }
-        
+        // Мобильные обработчики
         document.addEventListener('DOMContentLoaded', function() {
             const sidebar = document.querySelector('.sidebar');
             const sidebarTitle = sidebar?.querySelector('h2');
