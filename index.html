@@ -550,11 +550,11 @@
                 border-top: 2px solid #cbb99b;
                 z-index: 30;
                 transition: transform 0.3s ease;
-                transform: translateY(calc(100% - 80px)); /* Показываем шапку */
+                transform: translateY(calc(100% - 80px)); /* Показываем только шапку */
                 background: rgba(245, 235, 215, 0.98);
                 backdrop-filter: blur(10px);
                 will-change: transform;
-                touch-action: pan-y; /* Разрешаем вертикальные свайпы */
+                touch-action: pan-y;
                 box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
             }
             
@@ -604,7 +604,7 @@
                 max-height: calc(85vh - 120px);
                 overflow-y: auto;
                 padding: 16px 22px 22px;
-                -webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
+                -webkit-overflow-scrolling: touch;
             }
             
             .footer-note {
@@ -633,8 +633,7 @@
                 height: 40px;
             }
 
-            /* Добавляем индикатор для свайпа */
-            .info-header .swipe-indicator {
+            .swipe-indicator {
                 display: block;
                 text-align: center;
                 font-family: 'Caveat', cursive;
@@ -662,7 +661,7 @@
             }
             
             .info-panel {
-                transform: translateY(calc(100% - 70px)); /* Немного больше шапка на маленьких экранах */
+                transform: translateY(calc(100% - 70px));
             }
         }
     </style>
@@ -990,6 +989,18 @@
             if (places.length > 0) {
                 showInfo(places[0]);
                 highlightActivePlace(places[0].id);
+                
+                // НЕ открываем панель автоматически при загрузке на мобильных
+                if (window.innerWidth <= 900) {
+                    const infoPanel = document.getElementById('info-panel');
+                    infoPanel.classList.remove('expanded');
+                    // Устанавливаем позицию так, чтобы была видна только шапка
+                    setTimeout(() => {
+                        const panelHeight = infoPanel.offsetHeight;
+                        const headerHeight = 80;
+                        infoPanel.style.transform = `translateY(${panelHeight - headerHeight}px)`;
+                    }, 100);
+                }
             }
         });
 
@@ -1193,11 +1204,14 @@
                 }
             });
             
-            // Инициализируем позицию панели на мобильных
+            // Инициализируем позицию панели на мобильных (панель закрыта)
             if (window.innerWidth <= 900) {
-                const panelHeight = infoPanel.offsetHeight;
-                const headerHeight = 80;
-                infoPanel.style.transform = `translateY(${panelHeight - headerHeight}px)`;
+                setTimeout(() => {
+                    const panelHeight = infoPanel.offsetHeight;
+                    const headerHeight = 80;
+                    infoPanel.style.transform = `translateY(${panelHeight - headerHeight}px)`;
+                    infoPanel.classList.remove('expanded');
+                }, 100);
             }
         });
     </script>
