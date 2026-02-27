@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Cormorant+Garamond:wght@400;600;700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
-        /* ===== СТИЛИ (оставлены без изменений, добавлены только стили для глобального плеера) ===== */
+        /* ===== СТИЛИ ===== */
         * {
             margin: 0;
             padding: 0;
@@ -422,26 +422,33 @@
             color: #5f4a33;
         }
 
-        /* Адаптация для мобильных */
+        /* Адаптация для мобильных — плеер выше и крупнее */
         @media (max-width: 900px) {
             .global-player {
-                bottom: 15px;
-                right: 15px;
-                left: 15px;
+                bottom: 50px;         /* поднял выше */
+                right: 20px;
+                left: 20px;
                 max-width: none;
                 justify-content: space-between;
-                padding: 8px 16px;
+                padding: 8px 18px;
                 border-radius: 50px;
+                background: rgba(245, 235, 215, 0.98); /* чуть плотнее */
+                box-shadow: 0 8px 20px rgba(0,0,0,0.4);
             }
-            
+
             .global-player button {
-                width: 48px;
-                height: 48px;
-                font-size: 28px;
+                width: 56px;          /* больше кнопка */
+                height: 56px;
+                font-size: 32px;      /* и значок крупнее */
             }
-            
+
             .global-player .track-info {
                 flex: 1;
+                font-size: 1rem;      /* немного увеличил шрифт */
+            }
+
+            .global-player .track-time {
+                font-size: 0.9rem;
             }
         }
 
@@ -547,7 +554,7 @@
             right: 30px;
         }
 
-        /* Мобильные стили - исправленные (без изменений, кроме добавления z-index для плеера) */
+        /* Мобильные стили для основной структуры (без изменений) */
         @media (max-width: 900px) {
             .main {
                 flex-direction: column;
@@ -627,7 +634,7 @@
                 border-top: 2px solid #cbb99b;
                 z-index: 30;
                 transition: transform 0.3s ease;
-                transform: translateY(calc(100% - 80px)); /* Показываем только шапку */
+                transform: translateY(calc(100% - 80px));
                 background: rgba(245, 235, 215, 0.98);
                 backdrop-filter: blur(10px);
                 will-change: transform;
