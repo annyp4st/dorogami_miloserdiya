@@ -715,7 +715,7 @@
             <span class="track-time" id="globalTrackTime">00:00 / 00:00</span>
         </div>
     </div>
-    
+
     <script>
         // ==================== ДАННЫЕ ====================
         const places = [
@@ -1059,10 +1059,10 @@
                 if (window.innerWidth <= 900) {
                     const infoPanel = document.getElementById('info-panel');
                     infoPanel.classList.remove('expanded');
-                    // Устанавливаем позицию так, чтобы была видна только шапка
+                    // Устанавливаем позицию так, чтобы была видна только шапка (120px)
                     setTimeout(() => {
                         const panelHeight = infoPanel.offsetHeight;
-                        const headerHeight = 80;
+                        const headerHeight = 120; // Увеличено с 80 до 120
                         infoPanel.style.transform = `translateY(${panelHeight - headerHeight}px)`;
                     }, 100);
                 }
@@ -1147,7 +1147,7 @@
             // Функция для обновления позиции панели
             function setPanelTransform(y) {
                 const panelHeight = infoPanel.offsetHeight;
-                const headerHeight = 80; // Высота шапки
+                const headerHeight = 120; // Увеличено с 80 до 120
                 
                 // Минимальная позиция (полностью открыта)
                 const minY = 0;
@@ -1169,7 +1169,7 @@
                 infoPanel.classList.remove('dragging');
                 
                 const panelHeight = infoPanel.offsetHeight;
-                const headerHeight = 80;
+                const headerHeight = 120; // Увеличено
                 const threshold = panelHeight * 0.2; // 20% высоты для переключения
                 
                 // Определяем, в какое положение должна перейти панель
@@ -1244,7 +1244,7 @@
                     if (infoPanel.classList.contains('dragging')) return;
                     
                     const panelHeight = infoPanel.offsetHeight;
-                    const headerHeight = 80;
+                    const headerHeight = 120; // Увеличено
                     
                     if (infoPanel.classList.contains('expanded')) {
                         // Закрываем панель
@@ -1263,7 +1263,7 @@
                 if (sidebar) sidebar.classList.remove('expanded');
                 if (infoPanel && window.innerWidth <= 900 && infoPanel.classList.contains('expanded')) {
                     const panelHeight = infoPanel.offsetHeight;
-                    const headerHeight = 80;
+                    const headerHeight = 120; // Увеличено
                     infoPanel.classList.remove('expanded');
                     infoPanel.style.transform = `translateY(${panelHeight - headerHeight}px)`;
                 }
@@ -1273,7 +1273,7 @@
             if (window.innerWidth <= 900) {
                 setTimeout(() => {
                     const panelHeight = infoPanel.offsetHeight;
-                    const headerHeight = 80;
+                    const headerHeight = 120; // Увеличено
                     infoPanel.style.transform = `translateY(${panelHeight - headerHeight}px)`;
                     infoPanel.classList.remove('expanded');
                 }, 100);
