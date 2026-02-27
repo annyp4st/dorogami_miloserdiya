@@ -57,7 +57,7 @@
         .header {
             background: rgba(235, 220, 195, 0.7);
             backdrop-filter: blur(2px);
-            padding: 10px 20px;
+            padding: 18px 28px;
             border-bottom: 2px solid #b6a68b;
             box-shadow: 0 4px 8px rgba(100, 70, 40, 0.2);
             position: relative;
@@ -66,7 +66,7 @@
 
         .header h1 {
             font-family: 'Cormorant Garamond', 'Georgia', serif;
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: #3e2e1f;
             text-shadow: 1px 1px 2px rgba(255,245,220,0.8);
@@ -79,7 +79,7 @@
 
         .header h1 span {
             font-family: 'Caveat', cursive;
-            font-size: 1.5rem;
+            font-size: 2rem;
             margin-left: 20px;
             color: #7a4f2e;
             font-weight: 400;
@@ -87,7 +87,7 @@
 
         .header p {
             font-family: 'Caveat', cursive;
-            font-size: 1rem;
+            font-size: 1.2rem;
             color: #5f4a33;
             border-left: 3px solid #ab8b64;
             padding-left: 16px;
@@ -357,7 +357,7 @@
         /* ===== ГЛОБАЛЬНЫЙ АУДИОПЛЕЕР (всегда видимый) ===== */
         .global-player {
             position: fixed;
-            bottom: 20px;
+            bottom: 25px;
             right: 25px;
             background: rgba(245, 235, 215, 0.95);
             backdrop-filter: blur(8px);
@@ -422,141 +422,53 @@
             color: #5f4a33;
         }
 
-        /* Адаптация для мобильных — плеер выше и крупнее */
+        /* Адаптация для мобильных — шапка меньше, плеер ниже и компактнее */
         @media (max-width: 900px) {
+            /* Шапка */
+            .header {
+                padding: 10px 20px;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            .header h1 span {
+                font-size: 1.5rem;
+                margin-left: 10px;
+            }
+            .header p {
+                font-size: 1rem;
+                padding-left: 12px;
+            }
+
+            /* Плеер */
             .global-player {
-                bottom: 15px; 
-                padding: 6px 14px;
+                bottom: 15px;
                 right: 20px;
                 left: 20px;
                 max-width: none;
                 justify-content: space-between;
-                padding: 8px 18px;
+                padding: 6px 14px;
                 border-radius: 50px;
-                background: rgba(245, 235, 215, 0.98); /* чуть плотнее */
+                background: rgba(245, 235, 215, 0.98);
                 box-shadow: 0 8px 20px rgba(0,0,0,0.4);
             }
 
             .global-player button {
-                width: 44px;          /* больше кнопка */
+                width: 44px;
                 height: 44px;
-                font-size: 24px;      /* и значок крупнее */
+                font-size: 24px;
             }
 
             .global-player .track-info {
                 flex: 1;
-                font-size: 0.9rem;      /* немного увеличил шрифт */
+                font-size: 0.9rem;
             }
 
             .global-player .track-time {
                 font-size: 0.8rem;
             }
-        }
 
-        /* ===== ЛАЙТБОКС (просмотр фото) ===== */
-        .lightbox {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            padding: 20px;
-        }
-
-        .lightbox.active {
-            display: flex;
-        }
-
-        .lightbox-content {
-            max-width: 90vw;
-            max-height: 80vh;
-            object-fit: contain;
-            border: 4px solid #fbf3e0;
-            box-shadow: 0 0 30px rgba(0,0,0,0.7);
-            background: #fbf3e0;
-            padding: 8px 8px 16px 8px;
-            border-radius: 4px;
-        }
-
-        .lightbox-caption {
-            font-family: 'Caveat', cursive;
-            font-size: 1.3rem;
-            color: #fbf3e0;
-            margin-top: 16px;
-            text-align: center;
-            max-width: 80%;
-            background: rgba(60, 40, 20, 0.6);
-            padding: 8px 20px;
-            border-radius: 40px;
-            backdrop-filter: blur(4px);
-            border: 1px solid #dac09f;
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: 30px;
-            right: 40px;
-            font-size: 40px;
-            color: #fbf3e0;
-            cursor: pointer;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(60, 40, 20, 0.5);
-            border-radius: 50%;
-            border: 2px solid #dac09f;
-            transition: all 0.3s;
-            z-index: 1010;
-        }
-
-        .lightbox-close:hover {
-            background: rgba(139, 69, 19, 0.8);
-            transform: scale(1.1);
-        }
-
-        .lightbox-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 50px;
-            color: #fbf3e0;
-            cursor: pointer;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(60, 40, 20, 0.5);
-            border-radius: 50%;
-            border: 2px solid #dac09f;
-            transition: all 0.3s;
-            user-select: none;
-            z-index: 1010;
-        }
-
-        .lightbox-nav:hover {
-            background: rgba(139, 69, 19, 0.8);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .lightbox-nav.prev {
-            left: 30px;
-        }
-
-        .lightbox-nav.next {
-            right: 30px;
-        }
-
-        /* Мобильные стили для основной структуры (без изменений) */
-        @media (max-width: 900px) {
+            /* Остальные мобильные стили */
             .main {
                 flex-direction: column;
                 position: relative;
@@ -635,7 +547,8 @@
                 border-top: 2px solid #cbb99b;
                 z-index: 30;
                 transition: transform 0.3s ease;
-                transform: translateY(calc(100% - 80px));
+                /* Увеличили видимую часть с 80px до 120px */
+                transform: translateY(calc(100% - 120px));
                 background: rgba(245, 235, 215, 0.98);
                 backdrop-filter: blur(10px);
                 will-change: transform;
@@ -746,7 +659,8 @@
             }
             
             .info-panel {
-                transform: translateY(calc(100% - 70px));
+                /* Увеличили видимую часть для маленьких экранов */
+                transform: translateY(calc(100% - 110px));
             }
         }
     </style>
@@ -801,7 +715,7 @@
             <span class="track-time" id="globalTrackTime">00:00 / 00:00</span>
         </div>
     </div>
-
+    
     <script>
         // ==================== ДАННЫЕ ====================
         const places = [
