@@ -11,7 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Cormorant+Garamond:wght@400;600;700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
-        /* ===== СТИЛИ ===== */
+        /* ==================== ОСНОВНЫЕ СТИЛИ ==================== */
+        /* Сброс отступов и базовые настройки */
         * {
             margin: 0;
             padding: 0;
@@ -28,6 +29,7 @@
             padding: 12px;
         }
 
+        /* Контейнер, имитирующий раскрытую книгу */
         .book {
             width: 100%;
             max-width: 1600px;
@@ -54,10 +56,11 @@
             z-index: 5;
         }
 
+        /* ===== ШАПКА (заголовок) ===== */
         .header {
             background: rgba(235, 220, 195, 0.7);
             backdrop-filter: blur(2px);
-            padding: 18px 28px;
+            padding: 18px 28px;               /* вертикальные отступы — влияют на высоту шапки */
             border-bottom: 2px solid #b6a68b;
             box-shadow: 0 4px 8px rgba(100, 70, 40, 0.2);
             position: relative;
@@ -66,7 +69,7 @@
 
         .header h1 {
             font-family: 'Cormorant Garamond', 'Georgia', serif;
-            font-size: 2.2rem;
+            font-size: 2.2rem;                 /* размер основного заголовка */
             font-weight: 700;
             color: #3e2e1f;
             text-shadow: 1px 1px 2px rgba(255,245,220,0.8);
@@ -79,7 +82,7 @@
 
         .header h1 span {
             font-family: 'Caveat', cursive;
-            font-size: 2rem;
+            font-size: 2rem;                    /* размер подписи "заветы Льва Толстого" */
             margin-left: 20px;
             color: #7a4f2e;
             font-weight: 400;
@@ -87,13 +90,14 @@
 
         .header p {
             font-family: 'Caveat', cursive;
-            font-size: 1.2rem;
+            font-size: 1.2rem;                  /* размер подзаголовка */
             color: #5f4a33;
             border-left: 3px solid #ab8b64;
             padding-left: 16px;
             margin-top: 6px;
         }
 
+        /* ===== ОСНОВНАЯ ЧАСТЬ (карта + боковые панели) ===== */
         .main {
             display: flex;
             flex: 1;
@@ -102,9 +106,9 @@
             z-index: 2;
         }
 
-        /* Левая колонка - список мест */
+        /* Левая колонка — список мест */
         .sidebar {
-            width: 280px;
+            width: 280px;                        /* фиксированная ширина для десктопа */
             background: rgba(240, 230, 210, 0.6);
             backdrop-filter: blur(2px);
             border-right: 2px solid #cbb99b;
@@ -126,24 +130,13 @@
             letter-spacing: 3px;
         }
 
+        /* Список точек маршрута */
         .places-list {
             list-style: none;
             padding: 8px 16px 20px;
             overflow-y: auto;
             scrollbar-width: thin;
             scrollbar-color: #aa8f72 #e5d5be;
-        }
-
-        .places-list::-webkit-scrollbar {
-            width: 8px;
-        }
-        .places-list::-webkit-scrollbar-track {
-            background: #e5d5be;
-            border-radius: 10px;
-        }
-        .places-list::-webkit-scrollbar-thumb {
-            background: #aa8f72;
-            border-radius: 10px;
         }
 
         .places-list li {
@@ -162,14 +155,6 @@
             border-bottom: 1px solid #dccbb2;
         }
 
-        .places-list li:hover {
-            background: #efdecb;
-            border-left-width: 10px;
-            border-left-color: #7c5d3e;
-            transform: translateX(5px);
-            box-shadow: 0 6px 12px rgba(80, 50, 20, 0.2);
-        }
-
         .places-list li.active {
             border-left-color: #3e2a16;
             background: #e1cfb5;
@@ -177,7 +162,7 @@
             box-shadow: inset 0 0 0 1px #c9af8b;
         }
 
-        /* Карта */
+        /* Центральная область — карта */
         .map-container {
             flex: 1;
             position: relative;
@@ -192,9 +177,9 @@
             filter: sepia(0.2) contrast(0.95);
         }
 
-        /* Правая колонка - детали места */
+        /* Правая колонка — детали места */
         .info-panel {
-            width: 360px;
+            width: 360px;                         /* ширина для десктопа */
             background: rgba(245, 235, 215, 0.85);
             backdrop-filter: blur(2px);
             border-left: 2px solid #cbb99b;
@@ -205,14 +190,14 @@
         }
 
         .info-header {
-            padding: 22px 22px 12px;
+            padding: 22px 22px 12px;              /* внутренние отступы заголовка панели */
             border-bottom: 2px solid #cfbda2;
             background: rgba(225, 205, 175, 0.3);
         }
 
         .info-header h3 {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.6rem;
+            font-size: 1.6rem;                     /* размер названия места */
             font-weight: 700;
             color: #3e2b18;
             line-height: 1.3;
@@ -221,7 +206,7 @@
 
         .info-header .place-sub {
             font-family: 'Caveat', cursive;
-            font-size: 1.2rem;
+            font-size: 1.2rem;                      /* размер подзаголовка места */
             color: #745f45;
             border-top: 1px dotted #bb9f80;
             padding-top: 8px;
@@ -235,17 +220,7 @@
             scrollbar-color: #aa8f72 #ecdbbd;
         }
 
-        .info-content::-webkit-scrollbar {
-            width: 8px;
-        }
-        .info-content::-webkit-scrollbar-track {
-            background: #ecdbbd;
-        }
-        .info-content::-webkit-scrollbar-thumb {
-            background: #aa8f72;
-            border-radius: 8px;
-        }
-
+        /* Галерея фотографий в правой панели */
         .photo-gallery {
             display: flex;
             gap: 16px;
@@ -265,12 +240,8 @@
             transition: transform 0.2s;
         }
 
-        .photo-item:hover {
-            transform: translateY(-2px);
-        }
-
         .photo-item img {
-            height: 110px;
+            height: 110px;                         /* высота превью фотографий */
             width: auto;
             border-radius: 4px;
             box-shadow: 0 8px 15px rgba(60, 40, 20, 0.3), 0 0 0 1px #bea887, 0 0 0 3px #f3e9d2;
@@ -281,13 +252,9 @@
             margin-bottom: 4px;
         }
 
-        .photo-item:hover img {
-            box-shadow: 0 12px 20px rgba(40, 25, 10, 0.4), 0 0 0 1px #a4835a, 0 0 0 4px #e7d7bb;
-        }
-
         .photo-caption {
             font-family: 'Caveat', cursive;
-            font-size: 0.85rem;
+            font-size: 0.85rem;                     /* размер подписи под фото */
             color: #5f4a33;
             text-align: center;
             padding: 6px 8px;
@@ -305,7 +272,7 @@
 
         .place-fulltext {
             font-family: 'PT Serif', serif;
-            font-size: 0.98rem;
+            font-size: 0.98rem;                      /* размер текста описания */
             line-height: 1.8;
             color: #2f261c;
             background: rgba(250, 242, 225, 0.7);
@@ -319,6 +286,7 @@
             text-indent: 1.5em;
         }
 
+        /* Стиль для выделения длинных цитат */
         .tolstoy-quote {
             font-family: 'Caveat', cursive;
             font-size: 1.1rem;
@@ -337,11 +305,7 @@
             font-weight: 500;
         }
 
-        .tolstoy-quote:hover {
-            background: #e4cfb5;
-            box-shadow: 0 4px 12px rgba(120, 80, 40, 0.4);
-        }
-
+        /* Нижний колонтитул правой панели (только для десктопа) */
         .footer-note {
             font-family: 'Caveat', cursive;
             text-align: center;
@@ -357,13 +321,13 @@
         /* ===== ГЛОБАЛЬНЫЙ АУДИОПЛЕЕР (всегда видимый) ===== */
         .global-player {
             position: fixed;
-            bottom: 25px;
-            right: 25px;
+            bottom: 25px;                /* отступ от нижнего края экрана для десктопа */
+            right: 25px;                  /* отступ справа */
             background: rgba(245, 235, 215, 0.95);
             backdrop-filter: blur(8px);
             border: 2px solid #bea383;
             border-radius: 60px;
-            padding: 8px 18px 8px 12px;
+            padding: 8px 18px 8px 12px;   /* внутренние отступы — влияют на высоту плеера */
             box-shadow: 0 10px 20px rgba(0,0,0,0.3), inset 0 1px 4px #fff3e0;
             display: flex;
             align-items: center;
@@ -379,10 +343,10 @@
             background: #8b6f50;
             border: none;
             color: #fbf3e0;
-            width: 44px;
+            width: 44px;                  /* размер кнопки play/pause */
             height: 44px;
             border-radius: 50%;
-            font-size: 24px;
+            font-size: 24px;               /* размер символа на кнопке */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -393,17 +357,12 @@
             border: 1px solid #dbb78c;
         }
 
-        .global-player button:hover {
-            background: #6b4f34;
-            transform: scale(1.05);
-        }
-
         .global-player .track-info {
             display: flex;
             flex-direction: column;
             overflow: hidden;
             color: #2f2419;
-            font-size: 0.95rem;
+            font-size: 0.95rem;            /* размер текста с названием трека */
             line-height: 1.3;
             min-width: 0;
         }
@@ -417,19 +376,19 @@
         }
 
         .global-player .track-time {
-            font-size: 0.8rem;
+            font-size: 0.8rem;              /* размер времени */
             font-family: monospace;
             color: #5f4a33;
         }
 
-        /* Адаптация для мобильных — шапка меньше, плеер ниже и компактнее */
+        /* ===== АДАПТАЦИЯ ПОД МОБИЛЬНЫЕ УСТРОЙСТВА (max-width: 900px) ===== */
         @media (max-width: 900px) {
-            /* Шапка */
+            /* --- Шапка: уменьшена высота, чтобы освободить место под карту --- */
             .header {
-                padding: 10px 20px;
+                padding: 10px 20px;          /* уменьшены вертикальные отступы */
             }
             .header h1 {
-                font-size: 1.8rem;
+                font-size: 1.8rem;            /* уменьшен размер шрифта */
             }
             .header h1 span {
                 font-size: 1.5rem;
@@ -440,27 +399,27 @@
                 padding-left: 12px;
             }
 
-            /* Плеер */
+            /* --- Глобальный плеер: поднят выше, чтобы не перекрывать текст; 
+                   кнопка уменьшена, отступы сокращены — плеер стал компактнее --- */
             .global-player {
-                bottom: 15px;
+                bottom: 15px;                 /* отступ снизу 15px (было 25px) — поднят выше */
                 right: 20px;
                 left: 20px;
                 max-width: none;
                 justify-content: space-between;
-                padding: 6px 14px;
+                padding: 6px 14px;            /* уменьшены внутренние отступы */
                 border-radius: 50px;
                 background: rgba(245, 235, 215, 0.98);
                 box-shadow: 0 8px 20px rgba(0,0,0,0.4);
             }
 
             .global-player button {
-                width: 44px;
+                width: 44px;                   /* размер кнопки (было 44px, можно менять) */
                 height: 44px;
                 font-size: 24px;
             }
 
             .global-player .track-info {
-                flex: 1;
                 font-size: 0.9rem;
             }
 
@@ -468,7 +427,8 @@
                 font-size: 0.8rem;
             }
 
-            /* Остальные мобильные стили */
+            /* --- Перестроение макета для мобильных: карта на весь экран, 
+                   боковые панели накладываются поверх --- */
             .main {
                 flex-direction: column;
                 position: relative;
@@ -483,6 +443,7 @@
                 z-index: 1;
             }
             
+            /* Левая панель (список) в виде выезжающего меню */
             .sidebar {
                 position: absolute;
                 top: 16px;
@@ -494,14 +455,14 @@
                 border-radius: 40px;
                 border: 2px solid #cbb99b;
                 z-index: 20;
-                max-height: 60px;
+                max-height: 60px;               /* в свёрнутом состоянии виден только заголовок */
                 overflow: hidden;
                 transition: max-height 0.3s ease;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             }
             
             .sidebar.expanded {
-                max-height: 400px;
+                max-height: 400px;               /* раскрытое состояние */
                 border-radius: 24px;
                 padding-bottom: 16px;
             }
@@ -534,6 +495,7 @@
                 overflow-y: auto;
             }
             
+            /* Правая панель (информация о месте) — выезжает снизу */
             .info-panel {
                 position: absolute;
                 bottom: 0;
@@ -547,7 +509,10 @@
                 border-top: 2px solid #cbb99b;
                 z-index: 30;
                 transition: transform 0.3s ease;
-                /* Увеличили видимую часть с 80px до 120px */
+                /* Ключевой параметр: transform: translateY(calc(100% - 120px));
+                   Значение 120px определяет, какая часть панели видна в свёрнутом состоянии.
+                   Чем больше значение, тем больше видно (и тем легче зацепиться для свайпа).
+                   Ранее было 80px — увеличено до 120px, чтобы панель не уходила под плеер. */
                 transform: translateY(calc(100% - 120px));
                 background: rgba(245, 235, 215, 0.98);
                 backdrop-filter: blur(10px);
@@ -557,12 +522,12 @@
             }
             
             .info-panel.expanded {
-                transform: translateY(0);
+                transform: translateY(0);          /* полностью открыто */
                 max-height: 85vh;
             }
 
             .info-panel.dragging {
-                transition: none;
+                transition: none;                  /* отключаем анимацию во время перетаскивания */
             }
             
             .info-header {
@@ -594,21 +559,153 @@
             }
             
             .info-header h3 {
-                font-size: 1.4rem;
+                font-size: 1.4rem;                 /* размер названия на мобильных */
                 padding-top: 8px;
             }
             
             .info-content {
-                max-height: calc(85vh - 120px);
+                max-height: calc(85vh - 120px);     /* 120px — высота заголовка, синхронизировано с transform */
                 overflow-y: auto;
                 padding: 16px 22px 22px;
                 -webkit-overflow-scrolling: touch;
             }
             
             .footer-note {
-                display: none;
+                display: none;                      /* скрыт на мобильных */
             }
 
+            /* Индикатор для свайпа (добавляется скриптом) */
+            .swipe-indicator {
+                display: block;
+                text-align: center;
+                font-family: 'Caveat', cursive;
+                font-size: 0.9rem;
+                color: #8b6f50;
+                margin-top: 4px;
+            }
+        }
+
+        /* Дополнительные корректировки для очень маленьких экранов */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5rem;
+                flex-wrap: wrap;
+            }
+            .header h1 span {
+                font-size: 1.3rem;
+                margin-left: 8px;
+            }
+            .places-list li {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+            .info-header h3 {
+                font-size: 1.2rem;
+            }
+            
+            .info-panel {
+                /* Видимая часть увеличена до 110px (было 70px), чтобы лучше видеть заголовок */
+                transform: translateY(calc(100% - 110px));
+            }
+        }
+
+        /* ===== ЛАЙТБОКС (просмотр фото) ===== */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90vw;
+            max-height: 80vh;
+            object-fit: contain;
+            border: 4px solid #fbf3e0;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7);
+            background: #fbf3e0;
+            padding: 8px 8px 16px 8px;
+            border-radius: 4px;
+        }
+
+        .lightbox-caption {
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            color: #fbf3e0;
+            margin-top: 16px;
+            text-align: center;
+            max-width: 80%;
+            background: rgba(60, 40, 20, 0.6);
+            padding: 8px 20px;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
+            border: 1px solid #dac09f;
+        }
+
+        .lightbox-close,
+        .lightbox-nav {
+            position: absolute;
+            color: #fbf3e0;
+            cursor: pointer;
+            background: rgba(60, 40, 20, 0.5);
+            border-radius: 50%;
+            border: 2px solid #dac09f;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            z-index: 1010;
+        }
+
+        .lightbox-close {
+            top: 30px;
+            right: 40px;
+            font-size: 40px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .lightbox-nav {
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 50px;
+            width: 60px;
+            height: 60px;
+        }
+
+        .lightbox-nav.prev {
+            left: 30px;
+        }
+
+        .lightbox-nav.next {
+            right: 30px;
+        }
+
+        .lightbox-close:hover,
+        .lightbox-nav:hover {
+            background: rgba(139, 69, 19, 0.8);
+            transform: scale(1.1);
+        }
+
+        .lightbox-nav:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Адаптация лайтбокса под мобильные */
+        @media (max-width: 900px) {
             .lightbox-nav {
                 font-size: 30px;
                 width: 40px;
@@ -630,43 +727,11 @@
                 width: 40px;
                 height: 40px;
             }
-
-            .swipe-indicator {
-                display: block;
-                text-align: center;
-                font-family: 'Caveat', cursive;
-                font-size: 0.9rem;
-                color: #8b6f50;
-                margin-top: 4px;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .header h1 {
-                font-size: 1.5rem;
-                flex-wrap: wrap;
-            }
-            .header h1 span {
-                font-size: 1.3rem;
-                margin-left: 8px;
-            }
-            .places-list li {
-                padding: 10px 12px;
-                font-size: 0.9rem;
-            }
-            .info-header h3 {
-                font-size: 1.2rem;
-            }
-            
-            .info-panel {
-                /* Увеличили видимую часть для маленьких экранов */
-                transform: translateY(calc(100% - 110px));
-            }
         }
     </style>
 </head>
 <body>
-    <!-- ЛАЙТБОКС ДЛЯ ФОТО -->
+    <!-- ==================== ЛАЙТБОКС ДЛЯ ФОТО ==================== -->
     <div class="lightbox" id="lightbox">
         <span class="lightbox-close" id="lightbox-close">&times;</span>
         <span class="lightbox-nav prev" id="lightbox-prev">&#10094;</span>
@@ -675,14 +740,16 @@
         <div class="lightbox-caption" id="lightbox-caption"></div>
     </div>
 
+    <!-- ==================== ОСНОВНОЙ КОНТЕЙНЕР ==================== -->
     <div class="book">
+        <!-- Шапка -->
         <div class="header">
             <h1>Дорогами милосердия <span>заветы Льва Толстого</span></h1>
             <p>волонтёрство, доброта и помощь ближнему</p>
         </div>
 
         <div class="main">
-            <!-- Список точек -->
+            <!-- Левая панель: список точек -->
             <div class="sidebar">
                 <h2>Маршрут</h2>
                 <ul class="places-list" id="places-list"></ul>
@@ -693,7 +760,7 @@
                 <div id="map"></div>
             </div>
 
-            <!-- Панель с информацией -->
+            <!-- Правая панель: информация о месте -->
             <div class="info-panel" id="info-panel">
                 <div class="info-header" id="info-header">
                     <h3 id="info-title">Музейно-вокзальный комплекс «Козлова Засека»</h3>
@@ -717,7 +784,16 @@
     </div>
 
     <script>
-        // ==================== ДАННЫЕ ====================
+        // ==================== ДАННЫЕ О МЕСТАХ ====================
+        // Массив объектов, каждый описывает одну точку маршрута.
+        // Поля:
+        //   id          — уникальный номер
+        //   name        — название места
+        //   coords      — координаты [широта, долгота] для Яндекс.Карт
+        //   description — краткое описание (подзаголовок)
+        //   fullText    — полный текст рассказа
+        //   audio       — путь к аудиофайлу
+        //   images      — массив путей к фотографиям
         const places = [
             {
                 id: 1,
@@ -794,20 +870,21 @@
         ];
 
         // ==================== ГЛОБАЛЬНЫЙ АУДИОПЛЕЕР ====================
-        const globalAudio = new Audio();
+        const globalAudio = new Audio();                       // единый объект Audio
         const playPauseBtn = document.getElementById('globalPlayPauseBtn');
         const trackNameSpan = document.getElementById('globalTrackName');
         const trackTimeSpan = document.getElementById('globalTrackTime');
 
-        // Обновление кнопки и времени
+        // Обновление кнопки play/pause и отображения времени
         function updatePlayerUI() {
+            // Меняем символ кнопки в зависимости от состояния
             if (globalAudio.paused) {
                 playPauseBtn.textContent = '▶';
             } else {
                 playPauseBtn.textContent = '⏸';
             }
 
-            // Форматирование времени
+            // Форматирование времени (MM:SS)
             const formatTime = (seconds) => {
                 if (isNaN(seconds)) return '00:00';
                 const mins = Math.floor(seconds / 60);
@@ -820,7 +897,7 @@
             trackTimeSpan.textContent = `${current} / ${duration}`;
         }
 
-        // События аудио
+        // Подписка на события аудио для обновления интерфейса
         globalAudio.addEventListener('loadedmetadata', updatePlayerUI);
         globalAudio.addEventListener('timeupdate', updatePlayerUI);
         globalAudio.addEventListener('play', updatePlayerUI);
@@ -830,7 +907,7 @@
             trackTimeSpan.textContent = '00:00 / 00:00';
         });
 
-        // Кнопка play/pause
+        // Обработчик кнопки play/pause
         playPauseBtn.addEventListener('click', () => {
             if (globalAudio.paused) {
                 globalAudio.play();
@@ -839,26 +916,23 @@
             }
         });
 
-        // Функция обновления трека при смене точки
+        // Смена трека при выборе нового места
         function setGlobalTrack(place) {
             if (!place) return;
-            // Сохраняем текущее состояние воспроизведения, но меняем источник
-            const wasPlaying = !globalAudio.paused;
-            globalAudio.src = place.audio;
+            globalAudio.src = place.audio;      // устанавливаем новый источник
             globalAudio.load();
             trackNameSpan.textContent = place.name;
-            // Автоматически запускаем воспроизведение (пользователь инициировал действие)
+            // Автоматически запускаем воспроизведение (действие пользователя уже было)
             globalAudio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
         }
 
         // ==================== КАРТА И ЛОГИКА ====================
         let map, placemarks = [];
-        
+
         // ===== ЛАЙТБОКС =====
         let currentImages = [];
         let currentImageIndex = 0;
 
-        // Элементы лайтбокса
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const lightboxCaption = document.getElementById('lightbox-caption');
@@ -866,13 +940,13 @@
         const lightboxPrev = document.getElementById('lightbox-prev');
         const lightboxNext = document.getElementById('lightbox-next');
 
-        // Глобальные функции для лайтбокса
+        // Открыть лайтбокс с указанным массивом изображений и начальным индексом
         window.openLightbox = function(images, index) {
             currentImages = images;
             currentImageIndex = index;
             updateLightbox();
             lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden'; // запрет прокрутки фона
         };
 
         window.closeLightbox = function() {
@@ -885,6 +959,7 @@
             lightboxImg.src = currentImages[currentImageIndex];
             lightboxCaption.textContent = getPhotoCaption(currentImages[currentImageIndex]) || 'Фотография';
             
+            // Показываем стрелки навигации только если больше одного фото
             lightboxPrev.style.display = currentImages.length > 1 ? 'flex' : 'none';
             lightboxNext.style.display = currentImages.length > 1 ? 'flex' : 'none';
         }
@@ -914,7 +989,6 @@
 
         document.addEventListener('keydown', (e) => {
             if (!lightbox.classList.contains('active')) return;
-            
             if (e.key === 'Escape') {
                 closeLightbox();
             } else if (e.key === 'ArrowRight') {
@@ -924,63 +998,46 @@
             }
         });
 
-        // Функция для получения подписи к фото
+        // Функция получения подписи к фото по имени файла (из заранее заданного объекта)
         function getPhotoCaption(imgFile) {
             const captions = {
-                // Точка 1: Козлова Засека
                 'images/1.jpg': 'Козлова Засека сегодня',
                 'images/11.jpg': 'Станция Козлова Засека, 1883 г.',
-                
-                // Точка 2: Ясная Поляна
                 'images/2.jpg': 'Дом Л.Н. Толстого в Ясной Поляне',
                 'images/22.jpg': 'Л.Н. Толстой с дочерью Александрой, 1908 г. Фото В. Черткова',
-                
-                // Точка 3: Толстовский сквер
                 'images/3.jpg': 'Памятник Л.Н. Толстому в сквере',
                 'images/33.jpg': 'Толстовский сквер',
                 'images/333.jpg': 'Памятник Л.Н. Толстому',
-                
-                // Точка 4: Ликёрка-Лофт
                 'images/4.jpg': 'Граффити на трубе в Ликёрка-Лофт',
                 'images/44.jpg': 'Территория креативного пространства «Ликёрка-Лофт»',
-                
-                // Точка 5: Молодёжный центр «Родина»
                 'images/5.jpg': 'Молодёжный центр «Родина»',
                 'images/55.jpg': 'Волонтёры Тулы',
                 'images/555.jpg': 'Мой младший брат Лев (в центре) с одноклассниками принимает участие в акции «Письмо солдату»',
-                
-                // Точка 6: Музей на Металлистов
                 'images/6.jpg': 'Музей на улице Металлистов',
                 'images/66.jpg': 'Телефон с записью голоса Толстого',
-                
-                // Точка 7: Граффити на Октябрьской
                 'images/7.jpg': 'Граффити на Октябрьской, 49',
                 'images/77.jpg': '«Сильные люди всегда просты»',
-                
-                // Точка 8: Московский вокзал
                 'images/888.jpg': 'Курский вокзал в Туле (ныне Московский), 1908 г.',
                 'images/8.jpg': 'Московский вокзал, 2026 г.',
                 'images/88.jpg': '«На этом вокзале многократно бывал Л. Н. Толстой. В 1879 году он встречал здесь И. С. Тургенева»'
             };
-            
             return captions[imgFile] || '';
         }
 
-        // Функция для выделения цитат
+        // Выделение длинных цитат в тексте (для стилизации)
         function highlightTolstoyQuotes(text) {
             return text.replace(/«([^»]{30,})»/g, '<span class="tolstoy-quote">«$1»</span>');
         }
 
-        // Функция отображения информации о месте (без аудиоплеера)
+        // Функция отображения информации о месте в правой панели
         function showInfo(place) {
             document.getElementById('info-title').textContent = place.name;
             document.getElementById('info-sub').textContent = place.description;
 
             const contentDiv = document.getElementById('info-content');
             
-            // Галерея фото с подписями
+            // Построение галереи фотографий
             let galleryHtml = '<div class="photo-gallery">';
-            
             place.images.forEach((img, index) => {
                 const caption = getPhotoCaption(img);
                 galleryHtml += `
@@ -990,16 +1047,15 @@
                     </div>
                 `;
             });
-            
             galleryHtml += '</div>';
 
             // Текст с выделенными цитатами
             const highlightedText = highlightTolstoyQuotes(place.fullText);
             const textHtml = `<div class="place-fulltext">${highlightedText.replace(/\n/g, '<br>')}</div>`;
 
-            contentDiv.innerHTML = galleryHtml + textHtml; // Аудио больше не вставляем
+            contentDiv.innerHTML = galleryHtml + textHtml; // аудиоплеер больше не вставляется
 
-            // Добавляем обработчики для фото
+            // Обработчики клика на фото для открытия лайтбокса
             contentDiv.querySelectorAll('.photo-item').forEach(item => {
                 item.addEventListener('click', function() {
                     try {
@@ -1012,11 +1068,11 @@
                 });
             });
 
-            // Обновляем глобальный плеер
+            // Обновляем глобальный плеер (автоматически запускается)
             setGlobalTrack(place);
         }
 
-        // Инициализация карты
+        // Инициализация карты после загрузки API
         ymaps.ready(() => {
             map = new ymaps.Map('map', {
                 center: [54.176233, 37.597356],
@@ -1024,6 +1080,7 @@
                 controls: ['zoomControl', 'fullscreenControl']
             });
 
+            // Расстановка меток
             places.forEach(place => {
                 const placemark = new ymaps.Placemark(place.coords, {
                     hintContent: place.name,
@@ -1037,11 +1094,11 @@
                     showInfo(place);
                     highlightActivePlace(place.id);
                     
-                    // На мобильных устройствах автоматически открываем панель при клике на метку
+                    // На мобильных устройствах автоматически раскрыть панель при клике на метку
                     if (window.innerWidth <= 900) {
                         const infoPanel = document.getElementById('info-panel');
                         infoPanel.classList.add('expanded');
-                        infoPanel.style.transform = '';
+                        infoPanel.style.transform = ''; // сбрасываем transform, чтобы панель открылась
                     }
                 });
 
@@ -1049,27 +1106,30 @@
                 placemarks.push(placemark);
             });
 
+            // Заполнение списка мест в левой панели
             fillPlacesList();
 
+            // Показать первое место по умолчанию
             if (places.length > 0) {
-                showInfo(places[0]); // Это также установит трек в глобальном плеере и запустит его
+                showInfo(places[0]);
                 highlightActivePlace(places[0].id);
                 
-                // НЕ открываем панель автоматически при загрузке на мобильных
+                // На мобильных устройствах при загрузке панель должна быть в свёрнутом состоянии
                 if (window.innerWidth <= 900) {
                     const infoPanel = document.getElementById('info-panel');
                     infoPanel.classList.remove('expanded');
-                    // Устанавливаем позицию так, чтобы была видна только шапка (120px)
+                    // Устанавливаем transform в соответствии с CSS (120px)
+                    // Значение 120 должно совпадать со значением в медиа-запросе
                     setTimeout(() => {
                         const panelHeight = infoPanel.offsetHeight;
-                        const headerHeight = 120; // Увеличено с 80 до 120
+                        const headerHeight = 120; // видимая часть в свёрнутом состоянии
                         infoPanel.style.transform = `translateY(${panelHeight - headerHeight}px)`;
                     }, 100);
                 }
             }
         });
 
-        // Заполнение списка мест
+        // Заполнение списка мест (левая панель)
         function fillPlacesList() {
             const list = document.getElementById('places-list');
             list.innerHTML = '';
@@ -1082,7 +1142,6 @@
                     showInfo(place);
                     highlightActivePlace(place.id);
                     
-                    // На мобильных устройствах автоматически открываем панель при клике на пункт списка
                     if (window.innerWidth <= 900) {
                         const infoPanel = document.getElementById('info-panel');
                         infoPanel.classList.add('expanded');
@@ -1093,7 +1152,7 @@
             });
         }
 
-        // Подсветка активного места
+        // Подсветка активного элемента в списке
         function highlightActivePlace(id) {
             document.querySelectorAll('.places-list li').forEach(li => {
                 li.classList.remove('active');
@@ -1103,7 +1162,7 @@
             });
         }
 
-        // Мобильные обработчики для свайпа панели
+        // ==================== МОБИЛЬНЫЙ СВАЙП ДЛЯ ПРАВОЙ ПАНЕЛИ ====================
         document.addEventListener('DOMContentLoaded', function() {
             const sidebar = document.querySelector('.sidebar');
             const sidebarTitle = sidebar?.querySelector('h2');
@@ -1131,11 +1190,10 @@
             let isDragging = false;
             let currentTransform = 0;
             
-            // Функция для получения текущей позиции панели
+            // Получение текущего значения transform (translateY) в пикселях
             function getPanelTransform() {
                 const transform = window.getComputedStyle(infoPanel).transform;
                 if (transform === 'none') return 0;
-                
                 const matrix = transform.match(/matrix.*\((.+)\)/);
                 if (matrix) {
                     const values = matrix[1].split(', ');
@@ -1144,45 +1202,39 @@
                 return 0;
             }
             
-            // Функция для обновления позиции панели
+            // Установка новой позиции панели с ограничениями
             function setPanelTransform(y) {
                 const panelHeight = infoPanel.offsetHeight;
-                const headerHeight = 120; // Увеличено с 80 до 120
+                const headerHeight = 120; // должно совпадать со значением в CSS (видимая часть в свёрнутом состоянии)
                 
-                // Минимальная позиция (полностью открыта)
-                const minY = 0;
-                // Максимальная позиция (полностью закрыта, видна только шапка)
-                const maxY = panelHeight - headerHeight;
+                const minY = 0;                           // полностью открыто
+                const maxY = panelHeight - headerHeight;   // полностью закрыто (виден только заголовок)
                 
-                // Ограничиваем значения
                 y = Math.max(minY, Math.min(maxY, y));
                 currentTransform = y;
-                
                 infoPanel.style.transform = `translateY(${y}px)`;
             }
             
-            // Функция для завершения drag & drop
+            // Завершение перетаскивания — выбор конечного положения (открыто/закрыто)
             function endDrag() {
                 if (!isDragging) return;
-                
                 isDragging = false;
                 infoPanel.classList.remove('dragging');
                 
                 const panelHeight = infoPanel.offsetHeight;
-                const headerHeight = 120; // Увеличено
-                const threshold = panelHeight * 0.2; // 20% высоты для переключения
+                const headerHeight = 120;
+                const threshold = panelHeight * 0.2; // если перетащили больше 20% высоты, переключаем состояние
                 
-                // Определяем, в какое положение должна перейти панель
                 if (currentTransform < threshold) {
-                    // Открываем полностью
+                    // открыть полностью
                     infoPanel.classList.add('expanded');
                     infoPanel.style.transform = '';
                 } else if (currentTransform > panelHeight - headerHeight - threshold) {
-                    // Закрываем (показываем только шапку)
+                    // закрыть (показать только заголовок)
                     infoPanel.classList.remove('expanded');
                     infoPanel.style.transform = `translateY(${panelHeight - headerHeight}px)`;
                 } else {
-                    // Возвращаем в ближайшее положение
+                    // вернуться в ближайшее стабильное положение (открыто или закрыто)
                     if (infoPanel.classList.contains('expanded')) {
                         infoPanel.style.transform = '';
                     } else {
@@ -1191,7 +1243,7 @@
                 }
             }
             
-            // Обработчики touch-событий
+            // Обработчики касаний
             infoHeader.addEventListener('touchstart', (e) => {
                 startY = e.touches[0].clientY;
                 startTransform = getPanelTransform();
@@ -1202,11 +1254,9 @@
             
             infoHeader.addEventListener('touchmove', (e) => {
                 if (!isDragging) return;
-                
                 const currentY = e.touches[0].clientY;
                 const deltaY = currentY - startY;
                 const newTransform = startTransform + deltaY;
-                
                 setPanelTransform(newTransform);
                 e.preventDefault();
             }, { passive: false });
@@ -1214,10 +1264,9 @@
             infoHeader.addEventListener('touchend', endDrag);
             infoHeader.addEventListener('touchcancel', endDrag);
             
-            // Также добавляем поддержку мыши для тестирования
+            // Поддержка мыши для тестирования на десктопе (опционально)
             infoHeader.addEventListener('mousedown', (e) => {
                 if (window.innerWidth > 900) return;
-                
                 startY = e.clientY;
                 startTransform = getPanelTransform();
                 isDragging = true;
@@ -1227,53 +1276,50 @@
             
             document.addEventListener('mousemove', (e) => {
                 if (!isDragging || window.innerWidth > 900) return;
-                
                 const currentY = e.clientY;
                 const deltaY = currentY - startY;
                 const newTransform = startTransform + deltaY;
-                
                 setPanelTransform(newTransform);
             });
             
             document.addEventListener('mouseup', endDrag);
             
-            // Клик по заголовку для быстрого переключения
+            // Клик по заголовку для быстрого переключения (если не было перетаскивания)
             if (infoHeader) {
                 infoHeader.addEventListener('click', function(e) {
-                    // Не переключаем, если это был drag
                     if (infoPanel.classList.contains('dragging')) return;
                     
                     const panelHeight = infoPanel.offsetHeight;
-                    const headerHeight = 120; // Увеличено
+                    const headerHeight = 120;
                     
                     if (infoPanel.classList.contains('expanded')) {
-                        // Закрываем панель
+                        // закрыть
                         infoPanel.classList.remove('expanded');
                         infoPanel.style.transform = `translateY(${panelHeight - headerHeight}px)`;
                     } else {
-                        // Открываем панель
+                        // открыть
                         infoPanel.classList.add('expanded');
                         infoPanel.style.transform = '';
                     }
                 });
             }
             
-            // При клике на карту закрываем панель (но не полностью)
+            // При клике на карту — свернуть панель (если она открыта)
             document.getElementById('map').addEventListener('click', function() {
                 if (sidebar) sidebar.classList.remove('expanded');
                 if (infoPanel && window.innerWidth <= 900 && infoPanel.classList.contains('expanded')) {
                     const panelHeight = infoPanel.offsetHeight;
-                    const headerHeight = 120; // Увеличено
+                    const headerHeight = 120;
                     infoPanel.classList.remove('expanded');
                     infoPanel.style.transform = `translateY(${panelHeight - headerHeight}px)`;
                 }
             });
             
-            // Инициализируем позицию панели на мобильных (панель закрыта)
+            // Инициализация свёрнутого состояния при загрузке страницы на мобильных
             if (window.innerWidth <= 900) {
                 setTimeout(() => {
                     const panelHeight = infoPanel.offsetHeight;
-                    const headerHeight = 120; // Увеличено
+                    const headerHeight = 120;
                     infoPanel.style.transform = `translateY(${panelHeight - headerHeight}px)`;
                     infoPanel.classList.remove('expanded');
                 }, 100);
