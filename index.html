@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Cormorant+Garamond:wght@400;600;700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
-        /* ===== СТИЛИ ===== */
+        /* ===== СТИЛИ (оставлены без изменений, добавлены только стили для глобального плеера) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -342,20 +342,6 @@
             box-shadow: 0 4px 12px rgba(120, 80, 40, 0.4);
         }
 
-        .audio-player {
-            width: 100%;
-            margin-top: 12px;
-            border-radius: 40px;
-            background: #efddc5;
-            border: 2px solid #bea383;
-            box-shadow: inset 0 2px 5px #aa8b68, 0 4px 8px #ac8f6e;
-            height: 48px;
-        }
-
-        .audio-player::-webkit-media-controls-panel {
-            background: #efddc5;
-        }
-
         .footer-note {
             font-family: 'Caveat', cursive;
             text-align: center;
@@ -366,6 +352,97 @@
             background: rgba(215, 190, 160, 0.2);
             letter-spacing: 1px;
             box-shadow: inset 0 4px 6px -4px #b29675;
+        }
+
+        /* ===== ГЛОБАЛЬНЫЙ АУДИОПЛЕЕР (всегда видимый) ===== */
+        .global-player {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: rgba(245, 235, 215, 0.95);
+            backdrop-filter: blur(8px);
+            border: 2px solid #bea383;
+            border-radius: 60px;
+            padding: 8px 18px 8px 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3), inset 0 1px 4px #fff3e0;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            z-index: 2000;
+            font-family: 'PT Serif', serif;
+            max-width: 360px;
+            width: auto;
+            transition: all 0.2s;
+        }
+
+        .global-player button {
+            background: #8b6f50;
+            border: none;
+            color: #fbf3e0;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 1px 4px #dcc09f;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            border: 1px solid #dbb78c;
+        }
+
+        .global-player button:hover {
+            background: #6b4f34;
+            transform: scale(1.05);
+        }
+
+        .global-player .track-info {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: #2f2419;
+            font-size: 0.95rem;
+            line-height: 1.3;
+            min-width: 0;
+        }
+
+        .global-player .track-name {
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+
+        .global-player .track-time {
+            font-size: 0.8rem;
+            font-family: monospace;
+            color: #5f4a33;
+        }
+
+        /* Адаптация для мобильных */
+        @media (max-width: 900px) {
+            .global-player {
+                bottom: 15px;
+                right: 15px;
+                left: 15px;
+                max-width: none;
+                justify-content: space-between;
+                padding: 8px 16px;
+                border-radius: 50px;
+            }
+            
+            .global-player button {
+                width: 48px;
+                height: 48px;
+                font-size: 28px;
+            }
+            
+            .global-player .track-info {
+                flex: 1;
+            }
         }
 
         /* ===== ЛАЙТБОКС (просмотр фото) ===== */
@@ -470,7 +547,7 @@
             right: 30px;
         }
 
-        /* Мобильные стили - исправленные */
+        /* Мобильные стили - исправленные (без изменений, кроме добавления z-index для плеера) */
         @media (max-width: 900px) {
             .main {
                 flex-direction: column;
@@ -701,10 +778,19 @@
                     <div class="place-sub" id="info-sub">начало пути</div>
                 </div>
                 <div class="info-content" id="info-content">
-                    <!-- Содержимое подставляется скриптом -->
+                    <!-- Содержимое подставляется скриптом (без аудиоплеера) -->
                 </div>
                 <div class="footer-note">«Любовь - это бесценный дар, это единственная вещь, которую мы можем подарить, и всё же она у тебя остаётся»</div>
             </div>
+        </div>
+    </div>
+
+    <!-- Глобальный аудиоплеер (всегда видимый) -->
+    <div class="global-player" id="globalPlayer">
+        <button id="globalPlayPauseBtn">▶</button>
+        <div class="track-info">
+            <span class="track-name" id="globalTrackName">Музейно-вокзальный комплекс «Козлова Засека»</span>
+            <span class="track-time" id="globalTrackTime">00:00 / 00:00</span>
         </div>
     </div>
 
@@ -784,6 +870,64 @@
                 images: ['images/888.jpg', 'images/8.jpg', 'images/88.jpg']
             }
         ];
+
+        // ==================== ГЛОБАЛЬНЫЙ АУДИОПЛЕЕР ====================
+        const globalAudio = new Audio();
+        const playPauseBtn = document.getElementById('globalPlayPauseBtn');
+        const trackNameSpan = document.getElementById('globalTrackName');
+        const trackTimeSpan = document.getElementById('globalTrackTime');
+
+        // Обновление кнопки и времени
+        function updatePlayerUI() {
+            if (globalAudio.paused) {
+                playPauseBtn.textContent = '▶';
+            } else {
+                playPauseBtn.textContent = '⏸';
+            }
+
+            // Форматирование времени
+            const formatTime = (seconds) => {
+                if (isNaN(seconds)) return '00:00';
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            };
+
+            const current = formatTime(globalAudio.currentTime);
+            const duration = formatTime(globalAudio.duration);
+            trackTimeSpan.textContent = `${current} / ${duration}`;
+        }
+
+        // События аудио
+        globalAudio.addEventListener('loadedmetadata', updatePlayerUI);
+        globalAudio.addEventListener('timeupdate', updatePlayerUI);
+        globalAudio.addEventListener('play', updatePlayerUI);
+        globalAudio.addEventListener('pause', updatePlayerUI);
+        globalAudio.addEventListener('ended', () => {
+            playPauseBtn.textContent = '▶';
+            trackTimeSpan.textContent = '00:00 / 00:00';
+        });
+
+        // Кнопка play/pause
+        playPauseBtn.addEventListener('click', () => {
+            if (globalAudio.paused) {
+                globalAudio.play();
+            } else {
+                globalAudio.pause();
+            }
+        });
+
+        // Функция обновления трека при смене точки
+        function setGlobalTrack(place) {
+            if (!place) return;
+            // Сохраняем текущее состояние воспроизведения, но меняем источник
+            const wasPlaying = !globalAudio.paused;
+            globalAudio.src = place.audio;
+            globalAudio.load();
+            trackNameSpan.textContent = place.name;
+            // Автоматически запускаем воспроизведение (пользователь инициировал действие)
+            globalAudio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
+        }
 
         // ==================== КАРТА И ЛОГИКА ====================
         let map, placemarks = [];
@@ -905,7 +1049,7 @@
             return text.replace(/«([^»]{30,})»/g, '<span class="tolstoy-quote">«$1»</span>');
         }
 
-        // Функция отображения информации о месте
+        // Функция отображения информации о месте (без аудиоплеера)
         function showInfo(place) {
             document.getElementById('info-title').textContent = place.name;
             document.getElementById('info-sub').textContent = place.description;
@@ -917,7 +1061,6 @@
             
             place.images.forEach((img, index) => {
                 const caption = getPhotoCaption(img);
-                // Используем encodeURIComponent для безопасной передачи данных
                 galleryHtml += `
                     <div class="photo-item" data-images="${encodeURIComponent(JSON.stringify(place.images))}" data-index="${index}">
                         <img src="${img}" alt="${place.name}" loading="lazy">
@@ -932,10 +1075,7 @@
             const highlightedText = highlightTolstoyQuotes(place.fullText);
             const textHtml = `<div class="place-fulltext">${highlightedText.replace(/\n/g, '<br>')}</div>`;
 
-            // Аудиоплеер
-            const audioHtml = `<audio controls src="${place.audio}" class="audio-player"></audio>`;
-
-            contentDiv.innerHTML = galleryHtml + textHtml + audioHtml;
+            contentDiv.innerHTML = galleryHtml + textHtml; // Аудио больше не вставляем
 
             // Добавляем обработчики для фото
             contentDiv.querySelectorAll('.photo-item').forEach(item => {
@@ -949,6 +1089,9 @@
                     }
                 });
             });
+
+            // Обновляем глобальный плеер
+            setGlobalTrack(place);
         }
 
         // Инициализация карты
@@ -987,7 +1130,7 @@
             fillPlacesList();
 
             if (places.length > 0) {
-                showInfo(places[0]);
+                showInfo(places[0]); // Это также установит трек в глобальном плеере и запустит его
                 highlightActivePlace(places[0].id);
                 
                 // НЕ открываем панель автоматически при загрузке на мобильных
